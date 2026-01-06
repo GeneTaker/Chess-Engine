@@ -1,0 +1,3 @@
+C:/Users/jeffc/Chess-Engine/build/CMakeFiles/chess_engine.dir
+C:/Users/jeffc/Chess-Engine/build/CMakeFiles/edit_cache.dir
+C:/Users/jeffc/Chess-Engine/build/CMakeFiles/rebuild_cache.dir
