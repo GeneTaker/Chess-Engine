@@ -4,7 +4,7 @@
 #include <cstdint>
 
 enum class PieceType : uint8_t {
-    None = -1,
+    None = 12,
     Pawn = 0,
     Rook = 1,
     Knight = 2,

@@ -20,6 +20,7 @@ Board::Board() {
 
 bool Board::move(Move move, bool is_white) {
     //TODO
+    return false;
 }
 
 void Board::print_bitboards() {

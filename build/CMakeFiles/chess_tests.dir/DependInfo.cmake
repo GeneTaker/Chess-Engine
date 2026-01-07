@@ -11,6 +11,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "C:/Users/jeffc/Chess-Engine/src/board.cpp" "CMakeFiles/chess_tests.dir/src/board.cpp.obj" "gcc" "CMakeFiles/chess_tests.dir/src/board.cpp.obj.d"
   "C:/Users/jeffc/Chess-Engine/tests/catch_amalgamated.cpp" "CMakeFiles/chess_tests.dir/tests/catch_amalgamated.cpp.obj" "gcc" "CMakeFiles/chess_tests.dir/tests/catch_amalgamated.cpp.obj.d"
   "C:/Users/jeffc/Chess-Engine/tests/test_board.cpp" "CMakeFiles/chess_tests.dir/tests/test_board.cpp.obj" "gcc" "CMakeFiles/chess_tests.dir/tests/test_board.cpp.obj.d"
+  "C:/Users/jeffc/Chess-Engine/tests/test_pawn.cpp" "CMakeFiles/chess_tests.dir/tests/test_pawn.cpp.obj" "gcc" "CMakeFiles/chess_tests.dir/tests/test_pawn.cpp.obj.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

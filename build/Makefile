@@ -250,6 +250,30 @@ tests/test_board.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_board.cpp.s
 .PHONY : tests/test_board.cpp.s
 
+tests/test_pawn.obj: tests/test_pawn.cpp.obj
+.PHONY : tests/test_pawn.obj
+
+# target to build an object file
+tests/test_pawn.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_pawn.cpp.obj
+.PHONY : tests/test_pawn.cpp.obj
+
+tests/test_pawn.i: tests/test_pawn.cpp.i
+.PHONY : tests/test_pawn.i
+
+# target to preprocess a source file
+tests/test_pawn.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_pawn.cpp.i
+.PHONY : tests/test_pawn.cpp.i
+
+tests/test_pawn.s: tests/test_pawn.cpp.s
+.PHONY : tests/test_pawn.s
+
+# target to generate assembly for a file
+tests/test_pawn.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_pawn.cpp.s
+.PHONY : tests/test_pawn.cpp.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -273,6 +297,9 @@ help:
 	@echo ... tests/test_board.obj
 	@echo ... tests/test_board.i
 	@echo ... tests/test_board.s
+	@echo ... tests/test_pawn.obj
+	@echo ... tests/test_pawn.i
+	@echo ... tests/test_pawn.s
 .PHONY : help
 
 

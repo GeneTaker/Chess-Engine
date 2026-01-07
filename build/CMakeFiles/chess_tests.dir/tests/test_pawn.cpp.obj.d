@@ -1,5 +1,5 @@
-CMakeFiles/chess_tests.dir/tests/test_board.cpp.obj: \
- C:\Users\jeffc\Chess-Engine\tests\test_board.cpp \
+CMakeFiles/chess_tests.dir/tests/test_pawn.cpp.obj: \
+ C:\Users\jeffc\Chess-Engine\tests\test_pawn.cpp \
  C:\Users\jeffc\Chess-Engine\tests\catch_amalgamated.hpp \
  C:/msys64/mingw64/include/c++/15.2.0/cstddef \
  C:/msys64/mingw64/include/c++/15.2.0/x86_64-w64-mingw32/bits/c++config.h \
