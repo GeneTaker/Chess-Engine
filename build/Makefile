@@ -64,6 +64,16 @@ CMAKE_BINARY_DIR = C:\Users\jeffc\Chess-Engine\build
 #=============================================================================
 # Targets provided globally by CMake.
 
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running tests..."
+	"C:\Program Files\CMake\bin\ctest.exe" $(ARGS)
+.PHONY : test
+
+# Special rule for the target test
+test/fast: test
+.PHONY : test/fast
+
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake cache editor..."
@@ -128,6 +138,46 @@ chess_engine/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_engine.dir\build.make CMakeFiles/chess_engine.dir/build
 .PHONY : chess_engine/fast
 
+#=============================================================================
+# Target rules for targets named chess_tests
+
+# Build rule for target.
+chess_tests: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 chess_tests
+.PHONY : chess_tests
+
+# fast build rule for target.
+chess_tests/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/build
+.PHONY : chess_tests/fast
+
+src/board.obj: src/board.cpp.obj
+.PHONY : src/board.obj
+
+# target to build an object file
+src/board.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_engine.dir\build.make CMakeFiles/chess_engine.dir/src/board.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/src/board.cpp.obj
+.PHONY : src/board.cpp.obj
+
+src/board.i: src/board.cpp.i
+.PHONY : src/board.i
+
+# target to preprocess a source file
+src/board.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_engine.dir\build.make CMakeFiles/chess_engine.dir/src/board.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/src/board.cpp.i
+.PHONY : src/board.cpp.i
+
+src/board.s: src/board.cpp.s
+.PHONY : src/board.s
+
+# target to generate assembly for a file
+src/board.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_engine.dir\build.make CMakeFiles/chess_engine.dir/src/board.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/src/board.cpp.s
+.PHONY : src/board.cpp.s
+
 src/main.obj: src/main.cpp.obj
 .PHONY : src/main.obj
 
@@ -152,6 +202,54 @@ src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_engine.dir\build.make CMakeFiles/chess_engine.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+tests/catch_amalgamated.obj: tests/catch_amalgamated.cpp.obj
+.PHONY : tests/catch_amalgamated.obj
+
+# target to build an object file
+tests/catch_amalgamated.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/catch_amalgamated.cpp.obj
+.PHONY : tests/catch_amalgamated.cpp.obj
+
+tests/catch_amalgamated.i: tests/catch_amalgamated.cpp.i
+.PHONY : tests/catch_amalgamated.i
+
+# target to preprocess a source file
+tests/catch_amalgamated.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/catch_amalgamated.cpp.i
+.PHONY : tests/catch_amalgamated.cpp.i
+
+tests/catch_amalgamated.s: tests/catch_amalgamated.cpp.s
+.PHONY : tests/catch_amalgamated.s
+
+# target to generate assembly for a file
+tests/catch_amalgamated.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/catch_amalgamated.cpp.s
+.PHONY : tests/catch_amalgamated.cpp.s
+
+tests/test_board.obj: tests/test_board.cpp.obj
+.PHONY : tests/test_board.obj
+
+# target to build an object file
+tests/test_board.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_board.cpp.obj
+.PHONY : tests/test_board.cpp.obj
+
+tests/test_board.i: tests/test_board.cpp.i
+.PHONY : tests/test_board.i
+
+# target to preprocess a source file
+tests/test_board.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_board.cpp.i
+.PHONY : tests/test_board.cpp.i
+
+tests/test_board.s: tests/test_board.cpp.s
+.PHONY : tests/test_board.s
+
+# target to generate assembly for a file
+tests/test_board.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_board.cpp.s
+.PHONY : tests/test_board.cpp.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -160,10 +258,21 @@ help:
 	@echo ... depend
 	@echo ... edit_cache
 	@echo ... rebuild_cache
+	@echo ... test
 	@echo ... chess_engine
+	@echo ... chess_tests
+	@echo ... src/board.obj
+	@echo ... src/board.i
+	@echo ... src/board.s
 	@echo ... src/main.obj
 	@echo ... src/main.i
 	@echo ... src/main.s
+	@echo ... tests/catch_amalgamated.obj
+	@echo ... tests/catch_amalgamated.i
+	@echo ... tests/catch_amalgamated.s
+	@echo ... tests/test_board.obj
+	@echo ... tests/test_board.i
+	@echo ... tests/test_board.s
 .PHONY : help
 
 

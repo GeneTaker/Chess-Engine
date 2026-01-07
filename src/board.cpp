@@ -1,6 +1,5 @@
-#include "../board.h"
+#include "../include/board.h"
 
-class Board {
     // static constexpr int UNIQUE_PIECES = 12;
 
     // enum class PieceType : uint8_t {
@@ -15,16 +14,28 @@ class Board {
 
     // uint64_t bitboards[UNIQUE_PIECES] = {};
 
-public:
-    Board::Board() {
-        //TODO
-    }
-
-    void Board::move(Move move, bool isWhite) {
-        //TODO
-    }
-
-    void Board::print_bitboards() {
-        //TODO
-    }
+Board::Board() {
+    //TODO
 }
+
+bool Board::move(Move move, bool is_white) {
+    //TODO
+}
+
+void Board::print_bitboards() {
+    //TODO
+}
+
+uint64_t Board::get_bitboard(int index) {
+    return 0ULL;
+}
+
+uint64_t Board::get_occupancy(bool is_white) {
+    return 0ULL;
+}
+
+static constexpr int bb_index(PieceType type, bool is_white) {
+    return 0;
+}
+
+

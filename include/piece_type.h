@@ -4,13 +4,14 @@
 #include <cstdint>
 
 enum class PieceType : uint8_t {
-    PAWN = 0,
-    ROOK = 1,
-    KNIGHT = 2,
-    BISHOP = 3,
-    QUEEN = 4,
-    KING = 5,
-    BLACK_SHIFT = 6
+    None = -1,
+    Pawn = 0,
+    Rook = 1,
+    Knight = 2,
+    Bishop = 3,
+    Queen = 4,
+    King = 5,
+    Black = 6
 };
 
 #endif

@@ -63,10 +63,12 @@ CMAKE_BINARY_DIR = C:\Users\jeffc\Chess-Engine\build
 
 # The main recursive "all" target.
 all: CMakeFiles/chess_engine.dir/all
+all: CMakeFiles/chess_tests.dir/all
 .PHONY : all
 
 # The main recursive "codegen" target.
 codegen: CMakeFiles/chess_engine.dir/codegen
+codegen: CMakeFiles/chess_tests.dir/codegen
 .PHONY : codegen
 
 # The main recursive "preinstall" target.
@@ -75,6 +77,7 @@ preinstall:
 
 # The main recursive "clean" target.
 clean: CMakeFiles/chess_engine.dir/clean
+clean: CMakeFiles/chess_tests.dir/clean
 .PHONY : clean
 
 #=============================================================================
@@ -84,12 +87,12 @@ clean: CMakeFiles/chess_engine.dir/clean
 CMakeFiles/chess_engine.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_engine.dir\build.make CMakeFiles/chess_engine.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_engine.dir\build.make CMakeFiles/chess_engine.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\jeffc\Chess-Engine\build\CMakeFiles --progress-num=1,2 "Built target chess_engine"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\jeffc\Chess-Engine\build\CMakeFiles --progress-num=1,2,3 "Built target chess_engine"
 .PHONY : CMakeFiles/chess_engine.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/chess_engine.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\jeffc\Chess-Engine\build\CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\jeffc\Chess-Engine\build\CMakeFiles 3
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/chess_engine.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\jeffc\Chess-Engine\build\CMakeFiles 0
 .PHONY : CMakeFiles/chess_engine.dir/rule
@@ -101,13 +104,45 @@ chess_engine: CMakeFiles/chess_engine.dir/rule
 # codegen rule for target.
 CMakeFiles/chess_engine.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_engine.dir\build.make CMakeFiles/chess_engine.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\jeffc\Chess-Engine\build\CMakeFiles --progress-num=1,2 "Finished codegen for target chess_engine"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\jeffc\Chess-Engine\build\CMakeFiles --progress-num=1,2,3 "Finished codegen for target chess_engine"
 .PHONY : CMakeFiles/chess_engine.dir/codegen
 
 # clean rule for target.
 CMakeFiles/chess_engine.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_engine.dir\build.make CMakeFiles/chess_engine.dir/clean
 .PHONY : CMakeFiles/chess_engine.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/chess_tests.dir
+
+# All Build rule for target.
+CMakeFiles/chess_tests.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\jeffc\Chess-Engine\build\CMakeFiles --progress-num=4,5,6,7 "Built target chess_tests"
+.PHONY : CMakeFiles/chess_tests.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/chess_tests.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\jeffc\Chess-Engine\build\CMakeFiles 4
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/chess_tests.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\jeffc\Chess-Engine\build\CMakeFiles 0
+.PHONY : CMakeFiles/chess_tests.dir/rule
+
+# Convenience name for target.
+chess_tests: CMakeFiles/chess_tests.dir/rule
+.PHONY : chess_tests
+
+# codegen rule for target.
+CMakeFiles/chess_tests.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\jeffc\Chess-Engine\build\CMakeFiles --progress-num=4,5,6,7 "Finished codegen for target chess_tests"
+.PHONY : CMakeFiles/chess_tests.dir/codegen
+
+# clean rule for target.
+CMakeFiles/chess_tests.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/clean
+.PHONY : CMakeFiles/chess_tests.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

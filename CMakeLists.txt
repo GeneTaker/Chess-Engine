@@ -7,5 +7,27 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(chess_engine src/main.cpp src/board.cpp)
 
-# FORCE console subsystem at the CMake level
-set_property(TARGET chess_engine PROPERTY WIN32_EXECUTABLE OFF)
+# ==========================
+# Tests (Catch2)
+# ==========================
+
+add_executable(chess_tests 
+    tests/test_board.cpp
+    tests/catch_amalgamated.cpp  # Add this!
+    src/board.cpp
+)
+
+# Add include directories
+target_include_directories(chess_tests PRIVATE 
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/tests
+    ${CMAKE_SOURCE_DIR}/include
+)
+
+# Force console mode for Windows
+if(WIN32)
+    target_link_options(chess_tests PRIVATE -mconsole)
+endif()
+
+enable_testing()
+add_test(NAME chess_tests COMMAND chess_tests)
