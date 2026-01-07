@@ -11,13 +11,11 @@ using namespace std;
 class Board {
 private:
     static constexpr int UNIQUE_PIECES = 12;
-    
-    static constexpr int SIDES = 2;
-    static constexpr int WHITE = 0;
-    static constexpr int BLACK = 1;
+    static constexpr int PIECES = 6;
 
     uint64_t bitboards[UNIQUE_PIECES] = {};
-    uint64_t occupied[SIDES] = {};
+    uint64_t white_bitboard = 0ULL;
+    uint64_t black_bitboard = 0ULL;
 
     
 public:
@@ -53,7 +51,7 @@ public:
     uint64_t get_occupancy(bool is_white);
 
     // returns the index of a coloured piecetype within the bitboard array
-    static constexpr int bb_index(int type, bool is_white);
+    constexpr int bb_index(int type, bool is_white);
 };
 
 #endif
