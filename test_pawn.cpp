@@ -2,7 +2,6 @@
 #include "catch_amalgamated.hpp"
 
 #include "../include/board.h"
-#include "../include/piece_type.h"
 
 TEST_CASE("Pawn test, ensure Pawns can properly move") {
     Board board;

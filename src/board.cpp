@@ -15,7 +15,8 @@
     // uint64_t bitboards[UNIQUE_PIECES] = {};
 
 Board::Board() {
-    //TODO
+//     bitboards[] = 0x000000000000FF00ULL;
+//     bitboards[PieceType::Pawn] = 0x00FF000000000000ULL;
 }
 
 bool Board::move(Move move, bool is_white) {
@@ -35,7 +36,7 @@ uint64_t Board::get_occupancy(bool is_white) {
     return 0ULL;
 }
 
-static constexpr int bb_index(PieceType type, bool is_white) {
+static constexpr int bb_index(int type, bool is_white) {
     return 0;
 }
 

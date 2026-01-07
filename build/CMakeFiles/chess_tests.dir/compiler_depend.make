@@ -670,7 +670,6 @@ CMakeFiles/chess_tests.dir/tests/catch_amalgamated.cpp.obj: C:/Users/jeffc/Chess
 CMakeFiles/chess_tests.dir/tests/test_board.cpp.obj: C:/Users/jeffc/Chess-Engine/tests/test_board.cpp \
   C:/Users/jeffc/Chess-Engine/include/board.h \
   C:/Users/jeffc/Chess-Engine/include/move.h \
-  C:/Users/jeffc/Chess-Engine/include/piece_type.h \
   C:/msys64/mingw64/include/_mingw.h \
   C:/msys64/mingw64/include/_mingw_mac.h \
   C:/msys64/mingw64/include/_mingw_off_t.h \

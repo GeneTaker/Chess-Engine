@@ -4,7 +4,6 @@
 CMakeFiles/chess_engine.dir/src/board.cpp.obj: C:/Users/jeffc/Chess-Engine/src/board.cpp \
   C:/Users/jeffc/Chess-Engine/include/board.h \
   C:/Users/jeffc/Chess-Engine/include/move.h \
-  C:/Users/jeffc/Chess-Engine/include/piece_type.h \
   C:/msys64/mingw64/include/_mingw.h \
   C:/msys64/mingw64/include/_mingw_mac.h \
   C:/msys64/mingw64/include/_mingw_off_t.h \
@@ -328,6 +327,8 @@ C:/msys64/mingw64/include/_mingw_mac.h:
 
 C:/Users/jeffc/Chess-Engine/src/board.cpp:
 
+C:/msys64/mingw64/include/_mingw_stat64.h:
+
 C:/Users/jeffc/Chess-Engine/include/board.h:
 
 C:/Users/jeffc/Chess-Engine/include/move.h:
@@ -340,15 +341,11 @@ C:/msys64/mingw64/include/c++/15.2.0/bits/ios_base.h:
 
 C:/msys64/mingw64/include/_mingw.h:
 
-C:/Users/jeffc/Chess-Engine/include/piece_type.h:
-
 C:/msys64/mingw64/include/c++/15.2.0/bits/ranges_base.h:
 
 C:/msys64/mingw64/include/_mingw_off_t.h:
 
 C:/msys64/mingw64/include/c++/15.2.0/bits/ptr_traits.h:
-
-C:/msys64/mingw64/include/_mingw_stat64.h:
 
 C:/msys64/mingw64/include/_timeval.h:
 

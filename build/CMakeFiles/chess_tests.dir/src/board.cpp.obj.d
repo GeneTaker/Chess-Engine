@@ -152,5 +152,4 @@ CMakeFiles/chess_tests.dir/src/board.cpp.obj: \
  C:/msys64/mingw64/include/c++/15.2.0/bits/ostream.tcc \
  C:/msys64/mingw64/include/c++/15.2.0/istream \
  C:/msys64/mingw64/include/c++/15.2.0/bits/istream.tcc \
- C:/Users/jeffc/Chess-Engine/include/piece_type.h \
  C:/Users/jeffc/Chess-Engine/include/move.h
