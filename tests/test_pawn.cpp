@@ -73,6 +73,20 @@ TEST_CASE("Pawn test, ensure taking pieces is functional") {
     board.move(take2, false); // xd5
 }
 
+TEST_CASE("Pawn test, ensure can't take own pieces") {
+    Board board;
+    Move m(12, 20, Board::PAWN); // e3
+    Move m2(13, 20, Board::PAWN); // fxd5
+    board.move(m, true);
+    bool b = board.move(m2, true);
+
+    REQUIRE_FALSE(b);
+
+    uint64_t white_pawns = board.get_bitboard(Board::PAWN);
+
+    REQUIRE(white_pawns & (1ULL << 20));
+}
+
 TEST_CASE("Pawn test, blocked pawn") {
     Board board;
     Move m(12, 28, Board::PAWN); // e4

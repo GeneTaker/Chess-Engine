@@ -129,6 +129,11 @@ bool Board::is_legal_move(Move move, bool is_white) {
 
     // check if there is a piece there first
     if (!(move_mask & bitboards[piece_index])) return false;
+
+    uint64_t own = (is_white) ? white_bitboard : black_bitboard;
+    uint64_t to_mask = 1ULL << move.to;
+
+    if (own & to_mask) return false;
     
     // now check if it is a valid destination
     if (move.to >= TILES || move.to < 0) return false;
@@ -171,7 +176,7 @@ bool Board::legal_pawn_move(Move move, bool is_white) {
 
     // Single push
     if ((move.to == move.from + direction)) {
-        if ((!((own | other) & to_mask))) {
+        if ((!(other & to_mask))) {
             return true;
         }
     }
