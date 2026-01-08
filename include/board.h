@@ -17,7 +17,23 @@ private:
     uint64_t white_bitboard = 0ULL;
     uint64_t black_bitboard = 0ULL;
 
-    
+    static constexpr int TILES = 64;
+    static constexpr int SIDE = 8;
+
+    uint16_t enpassant = 0;
+
+    bool is_legal_move(Move move, bool is_white);
+    bool legal_pawn_move(Move move, bool is_white);
+    bool legal_rook_move(Move move, bool is_white);
+    bool legal_knight_move(Move move, bool is_white);
+    bool legal_queen_move(Move move, bool is_white);
+    bool legal_bishop_move(Move move, bool is_white);
+    bool legal_king_move(Move move, bool is_white);
+
+
+    bool can_promote(Move move, bool is_white);
+
+
 public:
     
     static constexpr int PAWN = 0;

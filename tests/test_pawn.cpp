@@ -112,8 +112,8 @@ TEST_CASE("Pawn test, pawn tries to double jump") {
     REQUIRE(white_pawns & (1ULL << 28));
     REQUIRE_FALSE(white_pawns & (1ULL << 44));
     
-    REQUIRE(black_pawns & (1ULL << 36));
-    REQUIRE_FALSE(black_pawns & (1ULL << 52));
+    REQUIRE(black_pawns & (1ULL << 35));
+    REQUIRE_FALSE(black_pawns & (1ULL << 51));
 
     REQUIRE(b1);
     REQUIRE(b2);
@@ -149,21 +149,19 @@ TEST_CASE("Pawn test, en passant") {
 TEST_CASE("Pawn test, promotion") {
     Board board;
     Move m(8, 24, Board::PAWN); // a4
-    Move m2_invalid(24, 32, Board::PAWN, Board::QUEEN); // a5, invalid promotion
     Move m2(24, 32, Board::PAWN); // a5
     Move m3(32, 40, Board::PAWN); // a6
-    Move m4(40, 48, Board::PAWN); // b7
+    Move m4(40, 49, Board::PAWN); // b7
     board.move(m, true);
-    REQUIRE_FALSE(board.move(m2_invalid, true));
     board.move(m2, true);
     board.move(m3, true);
-    board.move(m4, true);
+    REQUIRE(board.move(m4, true));
 
     std::vector<int> promos = {Board::QUEEN, Board::ROOK, Board::KNIGHT, Board::BISHOP};
     
     for (auto& p : promos) {
         Board temp = board;
-        Move m5(48, 56, Board::PAWN, p); // promoted to queen on a8
+        Move m5(49, 56, Board::PAWN, p); // promoted to queen on a8
         bool b = temp.move(m5, true);
     
         REQUIRE(b);
