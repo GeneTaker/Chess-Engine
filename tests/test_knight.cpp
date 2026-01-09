@@ -25,13 +25,12 @@ TEST_CASE("Knight test, ensure all knights are functional") {
 
     Move m1(1, 18, Board::KNIGHT);
     Move m2(6, 21, Board::KNIGHT);
-    Move m3(57, 42, Board::BLACK_KNIGHT);
-    Move m4(62, 45, Board::BLACK_KNIGHT);
-
+    Move m3(57, 42, Board::KNIGHT);
+    Move m4(62, 45, Board::KNIGHT);
 
     board.move(m1, true);
-    board.move(m2, false);
-    board.move(m3, true);
+    board.move(m3, false);
+    board.move(m2, true);
     board.move(m4, false);
 
     uint64_t white_knights = board.get_bitboard(Board::KNIGHT);
@@ -53,9 +52,9 @@ TEST_CASE("Knight test, ensure that knights can take pieces") {
     Board board;
 
     Move d4(11, 27, Board::PAWN);
-    Move nc6(57, 42, Board::BLACK_KNIGHT);
+    Move nc6(57, 42, Board::KNIGHT);
     Move nf3(6, 21, Board::KNIGHT);
-    Move ncxd4(42, 27, Board::BLACK_KNIGHT);
+    Move ncxd4(42, 27, Board::KNIGHT);
     Move nfxd4(21, 27, Board::KNIGHT);
 
     vector<Move> moves = {d4, nc6, nf3, ncxd4, nfxd4};
@@ -69,7 +68,7 @@ TEST_CASE("Knight test, ensure that knights can take pieces") {
     uint64_t white_knights = board.get_bitboard(Board::KNIGHT);
     REQUIRE(white_knights & (1ULL << 27));
     REQUIRE_FALSE(white_knights & (1ULL << 21));
-    uint64_t black_knights = board.get_bitboard(Board::KNIGHT);
+    uint64_t black_knights = board.get_bitboard(Board::BLACK_KNIGHT);
     REQUIRE_FALSE(black_knights & (1ULL << 27));
     REQUIRE_FALSE(black_knights & (1ULL << 42));
 
@@ -81,12 +80,12 @@ TEST_CASE("Knight test, ensure can't take own pieces") {
     Board board;
 
     Move m1(11, 27, Board::PAWN);
-    Move m2(51, 35, Board::BLACK_PAWN);
+    Move m2(51, 35, Board::PAWN);
     Move m3(6, 21, Board::KNIGHT);
-    Move m4(62, 45, Board::BLACK_KNIGHT);
+    Move m4(62, 45, Board::KNIGHT);
 
     Move m5(21, 27, Board::KNIGHT);
-    Move m6(45, 35, Board::BLACK_KNIGHT);
+    Move m6(45, 35, Board::KNIGHT);
 
     board.move(m1, true);
     board.move(m2, false);

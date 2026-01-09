@@ -23,6 +23,8 @@ private:
     static constexpr uint64_t FILE_A = 0x0101010101010101ULL;
     static constexpr uint64_t FILE_H = 0x8080808080808080ULL;
 
+    uint64_t knight_attacks[TILES] = {};
+
     uint16_t enpassant = 0;
 
     bool is_legal_move(Move move, bool is_white);
@@ -56,6 +58,9 @@ public:
 
     // initialises the initial state of the board
     Board();
+
+    // initialises a board of possible knight attacks from every square
+    void init_knight_moves(int index);
 
     // updates the board with a move
     bool move(Move move, bool is_white);

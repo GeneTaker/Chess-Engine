@@ -1,5 +1,6 @@
 #include "../include/board.h"
 #include <vector>
+#include <algorithm>
 
 #define UP 1
 #define DOWN -1
@@ -30,6 +31,27 @@ Board::Board() {
     for (int i = 0; i < Board::PIECES; i++) {
         white_bitboard |= bitboards[i];
         black_bitboard |= bitboards[i + Board::BLACK_SHIFT];
+    }
+
+    for (int i = 0; i < Board::TILES; i++) {
+        init_knight_moves(i);
+    }
+}
+
+void Board::init_knight_moves(int index) {
+    vector<int> offsets = {6, 10, 15, 17, -6, -10, -15, -17};
+
+    for (int o : offsets) {
+        int to_pos = index + o;
+        
+        if (to_pos >= Board::TILES || to_pos < 0) continue;
+
+        int to_file = to_pos % Board::SIDE;
+        int from_file = index % Board::SIDE;
+
+        if (abs(to_file - from_file) > DOUBLE) continue;
+        
+        knight_attacks[index] |= (1ULL << to_pos);
     }
 }
 
@@ -86,9 +108,7 @@ bool Board::move(Move move, bool is_white) {
     if (move.type == Board::PAWN && abs(move.to - move.from) == DOUBLE * Board::SIDE) {
         int offset = (is_white) ? Board::SIDE : 0;
         enpassant = 1 << ((move.to % Board::SIDE) + offset); 
-    }
-    
-    
+    }   
 
     if (to_mask & *opp && !can_enpassant) {
         *opp ^= to_mask;
@@ -228,8 +248,10 @@ bool Board::legal_rook_move(Move move, bool is_white) {
 }
 
 bool Board::legal_knight_move(Move move, bool is_white) {
-    
-    return false;
+    uint64_t legal_moves = knight_attacks[move.from];
+    uint64_t to_mask = 1ULL << move.to;
+
+    return !((legal_moves & to_mask) == 0);
 }
 
 bool Board::legal_queen_move(Move move, bool is_white) {
