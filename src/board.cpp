@@ -193,8 +193,9 @@ bool Board::legal_pawn_move(Move move, bool is_white) {
     }
     
     // Capture
-    uint64_t capture_left = (is_white) ? (from_mask << (Board::SIDE - 1)) : (from_mask >> (Board::SIDE + 1));
-    uint64_t capture_right = (is_white) ? (from_mask << (Board::SIDE + 1)) : (from_mask >> (Board::SIDE - 1));
+    uint64_t capture_left = (is_white) ? (from_mask & ~Board::FILE_A) << (Board::SIDE - 1) : (from_mask & ~Board::FILE_H) >> (Board::SIDE + 1);
+    uint64_t capture_right = (is_white) ? (from_mask & ~Board::FILE_H) << (Board::SIDE + 1) : (from_mask & ~Board::FILE_A) >> (Board::SIDE - 1);
+
 
     if ((capture_left | capture_right) & to_mask & other) {
         return true;
@@ -227,6 +228,7 @@ bool Board::legal_rook_move(Move move, bool is_white) {
 }
 
 bool Board::legal_knight_move(Move move, bool is_white) {
+    
     return false;
 }
 

@@ -20,6 +20,9 @@ private:
     static constexpr int TILES = 64;
     static constexpr int SIDE = 8;
 
+    static constexpr uint64_t FILE_A = 0x0101010101010101ULL;
+    static constexpr uint64_t FILE_H = 0x8080808080808080ULL;
+
     uint16_t enpassant = 0;
 
     bool is_legal_move(Move move, bool is_white);

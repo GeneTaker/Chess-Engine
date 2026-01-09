@@ -5,6 +5,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/chess_tests.dir/tests/catch_amalgamated.cpp.obj.d"
   "CMakeFiles/chess_tests.dir/tests/test_board.cpp.obj"
   "CMakeFiles/chess_tests.dir/tests/test_board.cpp.obj.d"
+  "CMakeFiles/chess_tests.dir/tests/test_knight.cpp.obj"
+  "CMakeFiles/chess_tests.dir/tests/test_knight.cpp.obj.d"
   "CMakeFiles/chess_tests.dir/tests/test_pawn.cpp.obj"
   "CMakeFiles/chess_tests.dir/tests/test_pawn.cpp.obj.d"
   "chess_tests.exe"

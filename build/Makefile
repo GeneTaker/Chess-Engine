@@ -250,6 +250,30 @@ tests/test_board.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_board.cpp.s
 .PHONY : tests/test_board.cpp.s
 
+tests/test_knight.obj: tests/test_knight.cpp.obj
+.PHONY : tests/test_knight.obj
+
+# target to build an object file
+tests/test_knight.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_knight.cpp.obj
+.PHONY : tests/test_knight.cpp.obj
+
+tests/test_knight.i: tests/test_knight.cpp.i
+.PHONY : tests/test_knight.i
+
+# target to preprocess a source file
+tests/test_knight.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_knight.cpp.i
+.PHONY : tests/test_knight.cpp.i
+
+tests/test_knight.s: tests/test_knight.cpp.s
+.PHONY : tests/test_knight.s
+
+# target to generate assembly for a file
+tests/test_knight.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_knight.cpp.s
+.PHONY : tests/test_knight.cpp.s
+
 tests/test_pawn.obj: tests/test_pawn.cpp.obj
 .PHONY : tests/test_pawn.obj
 
@@ -297,6 +321,9 @@ help:
 	@echo ... tests/test_board.obj
 	@echo ... tests/test_board.i
 	@echo ... tests/test_board.s
+	@echo ... tests/test_knight.obj
+	@echo ... tests/test_knight.i
+	@echo ... tests/test_knight.s
 	@echo ... tests/test_pawn.obj
 	@echo ... tests/test_pawn.i
 	@echo ... tests/test_pawn.s
