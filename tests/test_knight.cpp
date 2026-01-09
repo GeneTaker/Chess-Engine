@@ -18,6 +18,10 @@ TEST_CASE("Knight test, ensure that knights can properly move") {
     uint64_t white_occ = board.get_occupancy(true);
     REQUIRE(white_occ & (1ULL << 18));
     REQUIRE_FALSE(white_occ & (1ULL << 1));
+
+    Move invalid(6, 16, Board::KNIGHT);
+    bool fail = board.move(invalid, true);
+    REQUIRE_FALSE(fail);
 }
 
 TEST_CASE("Knight test, ensure all knights are functional") {
