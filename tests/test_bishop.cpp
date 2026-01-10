@@ -6,7 +6,7 @@ TEST_CASE("Bishop test, ensure bishops are capable of moving") {
     Board board;
 
     Move e4(12, 28, Board::PAWN);
-    Move e5(51, 35, Board::PAWN);
+    Move e5(52, 36, Board::PAWN);
     Move bc4(5, 26, Board::BISHOP);
     Move bc5(61, 34, Board::BISHOP);
 
@@ -54,12 +54,12 @@ TEST_CASE("Bishop test, ensure bishops can take pieces but are blocked by opposi
     board.move(bc4, true);
     board.move(d5, false);
 
-    Move invalid(35, 53, Board::BISHOP);
+    Move invalid(26, 53, Board::BISHOP);
     bool inv = board.move(invalid, true);
     REQUIRE_FALSE(inv);
     uint64_t curr = board.get_bitboard(Board::BISHOP);
 
-    REQUIRE(curr & (1ULL << 35));
+    REQUIRE(curr & (1ULL << 26));
     REQUIRE_FALSE(curr & (1ULL << 53));
 
     bool b = board.move(bxd5, true);

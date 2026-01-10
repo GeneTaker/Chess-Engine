@@ -10,6 +10,7 @@
 #define ENPASSANT_BLACK 2
 
 uint64_t Board::rook_attacks[TILES][4096];
+uint64_t Board::bishop_attacks[TILES][512];
 
 Board::Board() {
     bitboards[Board::PAWN] = 0x000000000000FF00ULL;
@@ -37,9 +38,11 @@ Board::Board() {
     for (int i = 0; i < Board::TILES; i++) {
         init_knight_moves(i);
         rook_masks[i] = find_rook_mask(i);
+        bishop_masks[i] = find_bishop_mask(i);
         
     }
     init_rook_moves();
+    init_bishop_moves();
 }
 
 void Board::init_knight_moves(int index) {
@@ -87,14 +90,14 @@ int Board::num_bits(uint64_t mask) {
 
 uint64_t Board::set_occupancy(uint64_t mask, int bits, int index) {
     uint64_t result = 0ULL;
-
+    
     for (int i = 0; i < bits; i++) {
         int square = pop_bit(&mask);
         if (index & (1ULL << i)) {
             result |= (1ULL << square);
         }
     }
-
+    
     return result;
 }
 
@@ -102,7 +105,7 @@ uint64_t Board::find_rook_attacks(int sq, uint64_t blockers) {
     uint64_t result = 0;
     int rank = sq / Board::SIDE;
     int file = sq % Board::SIDE;
-
+    
     // Scan north
     for (int i = rank + 1; i < Board::SIDE; i++) {
         int s = i * Board::SIDE + file;
@@ -130,30 +133,30 @@ uint64_t Board::find_rook_attacks(int sq, uint64_t blockers) {
         result |= (1ULL << s);
         if (blockers & (1ULL << s)) break;
     }
-
+    
     return result;
 }
 
 int Board::pop_bit(uint64_t *mask) {
     int index = 0;
     uint64_t b = *mask;
-
+    
     while ((b & 1) == 0) {
         b >>= 1;
         index++;
     }
-
+    
     *mask &= (*mask - 1);
-
+    
     return index;
 }
 
 uint64_t Board::find_rook_mask(int index) {
     int file = index % Board::SIDE;
     int rank = index / Board::SIDE;
-
+    
     uint64_t result = 0ULL;
-
+    
     // Horizontal file
     for (int i = 1; i < Board::SIDE - 1; i++) {
         if (i != file) {
@@ -167,7 +170,90 @@ uint64_t Board::find_rook_mask(int index) {
             result |= (1ULL << (file + Board::SIDE * i));
         }
     }
+    
+    return result;
+}
 
+void Board::init_bishop_moves() {
+    for (int sq = 0; sq < Board::TILES; sq++) {
+        uint64_t mask = bishop_masks[sq];
+        int bit_count = num_bits(mask);
+
+        for (int i = 0; i < (1ULL << bit_count); i++) {
+            uint64_t blockers = set_occupancy(mask, bit_count, i);
+            
+            uint64_t attacks = find_bishop_attacks(sq, blockers);
+
+            uint64_t index = (blockers * bishop_magic[sq]) >> (Board::TILES - bishop_shift[sq]);
+
+            bishop_attacks[sq][index] = attacks;
+        }
+    }
+}
+
+uint64_t Board::find_bishop_attacks(int sq, uint64_t blockers) {
+    uint64_t result = 0;
+
+    int file = sq % Board::SIDE;
+    int rank = sq / Board::SIDE;
+
+    //NE
+    for (int x = file + 1, y = rank + 1; x < Board::SIDE && y < Board::SIDE; x++, y++) {
+        uint64_t mask = 1ULL << (x + Board::SIDE * y);
+        result |= mask;
+        if (blockers & mask) break;
+    }
+
+    //NW
+    for (int x = file - 1, y = rank + 1; x >= 0 && y < Board::SIDE; x--, y++) {
+        uint64_t mask = 1ULL << (x + Board::SIDE * y);
+        result |= mask;
+        if (blockers & mask) break;
+    }
+
+    //SW
+    for (int x = file - 1, y = rank - 1; x >= 0 && y >= 0; x--, y--) {
+        uint64_t mask = 1ULL << (x + Board::SIDE * y);
+        result |= mask;
+        if (blockers & mask) break;
+    }
+    
+    //SE    
+    for (int x = file + 1, y = rank - 1; x < Board::SIDE && y >= 0; x++, y--) {
+        uint64_t mask = 1ULL << (x + Board::SIDE * y);
+        result |= mask;
+        if (blockers & mask) break;
+    }
+    
+    return result;
+}
+
+uint64_t Board::find_bishop_mask(int index) {
+    uint64_t result = 0;
+    
+    int file = index % Board::SIDE;
+    int rank = index / Board::SIDE;
+
+    //NE
+    for (int x = file + 1, y = rank + 1; x < Board::SIDE - 1 && y < Board::SIDE - 1; x++, y++) {
+        result |= (1ULL << (x + Board::SIDE * y));
+    }
+
+    //NW
+    for (int x = file - 1, y = rank + 1; x > 0 && y < Board::SIDE - 1; x--, y++) {
+        result |= (1ULL << (x + Board::SIDE * y));
+    }
+
+    //SW
+    for (int x = file - 1, y = rank - 1; x > 0 && y > 0; x--, y--) {
+        result |= (1ULL << (x + Board::SIDE * y));
+    }
+    
+    //SE    
+    for (int x = file + 1, y = rank - 1; x < Board::SIDE - 1 && y > 0; x++, y--) {
+        result |= (1ULL << (x + Board::SIDE * y));
+    }
+    
     return result;
 }
 
@@ -384,7 +470,14 @@ bool Board::legal_queen_move(Move move, bool is_white) {
 }
 
 bool Board::legal_bishop_move(Move move, bool is_white) {
-    return false;
+    uint64_t occupied = white_bitboard | black_bitboard;
+    
+    uint64_t blockers = occupied & bishop_masks[move.from];
+
+    int index = (blockers * bishop_magic[move.from]) >> (Board::TILES - bishop_shift[move.from]);
+
+    uint64_t to_mask = (1ULL << move.to);
+    return (bishop_attacks[move.from][index] & to_mask) != 0;
 }
 
 bool Board::legal_king_move(Move move, bool is_white) {

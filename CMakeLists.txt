@@ -17,6 +17,7 @@ add_executable(chess_tests
     tests/test_pawn.cpp
     tests/test_knight.cpp
     tests/test_rook.cpp
+    tests/test_bishop.cpp
     tests/catch_amalgamated.cpp  # Add this!
     src/board.cpp
 )

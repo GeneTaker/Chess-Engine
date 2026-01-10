@@ -226,6 +226,30 @@ tests/catch_amalgamated.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/catch_amalgamated.cpp.s
 .PHONY : tests/catch_amalgamated.cpp.s
 
+tests/test_bishop.obj: tests/test_bishop.cpp.obj
+.PHONY : tests/test_bishop.obj
+
+# target to build an object file
+tests/test_bishop.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_bishop.cpp.obj
+.PHONY : tests/test_bishop.cpp.obj
+
+tests/test_bishop.i: tests/test_bishop.cpp.i
+.PHONY : tests/test_bishop.i
+
+# target to preprocess a source file
+tests/test_bishop.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_bishop.cpp.i
+.PHONY : tests/test_bishop.cpp.i
+
+tests/test_bishop.s: tests/test_bishop.cpp.s
+.PHONY : tests/test_bishop.s
+
+# target to generate assembly for a file
+tests/test_bishop.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_bishop.cpp.s
+.PHONY : tests/test_bishop.cpp.s
+
 tests/test_board.obj: tests/test_board.cpp.obj
 .PHONY : tests/test_board.obj
 
@@ -366,6 +390,9 @@ help:
 	@echo ... tests/catch_amalgamated.obj
 	@echo ... tests/catch_amalgamated.i
 	@echo ... tests/catch_amalgamated.s
+	@echo ... tests/test_bishop.obj
+	@echo ... tests/test_bishop.i
+	@echo ... tests/test_bishop.s
 	@echo ... tests/test_board.obj
 	@echo ... tests/test_board.i
 	@echo ... tests/test_board.s
