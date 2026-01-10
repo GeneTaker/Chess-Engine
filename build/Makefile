@@ -274,6 +274,30 @@ tests/test_knight.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_knight.cpp.s
 .PHONY : tests/test_knight.cpp.s
 
+tests/test_main.obj: tests/test_main.cpp.obj
+.PHONY : tests/test_main.obj
+
+# target to build an object file
+tests/test_main.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_main.cpp.obj
+.PHONY : tests/test_main.cpp.obj
+
+tests/test_main.i: tests/test_main.cpp.i
+.PHONY : tests/test_main.i
+
+# target to preprocess a source file
+tests/test_main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_main.cpp.i
+.PHONY : tests/test_main.cpp.i
+
+tests/test_main.s: tests/test_main.cpp.s
+.PHONY : tests/test_main.s
+
+# target to generate assembly for a file
+tests/test_main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_main.cpp.s
+.PHONY : tests/test_main.cpp.s
+
 tests/test_pawn.obj: tests/test_pawn.cpp.obj
 .PHONY : tests/test_pawn.obj
 
@@ -297,6 +321,30 @@ tests/test_pawn.s: tests/test_pawn.cpp.s
 tests/test_pawn.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_pawn.cpp.s
 .PHONY : tests/test_pawn.cpp.s
+
+tests/test_rook.obj: tests/test_rook.cpp.obj
+.PHONY : tests/test_rook.obj
+
+# target to build an object file
+tests/test_rook.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_rook.cpp.obj
+.PHONY : tests/test_rook.cpp.obj
+
+tests/test_rook.i: tests/test_rook.cpp.i
+.PHONY : tests/test_rook.i
+
+# target to preprocess a source file
+tests/test_rook.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_rook.cpp.i
+.PHONY : tests/test_rook.cpp.i
+
+tests/test_rook.s: tests/test_rook.cpp.s
+.PHONY : tests/test_rook.s
+
+# target to generate assembly for a file
+tests/test_rook.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_rook.cpp.s
+.PHONY : tests/test_rook.cpp.s
 
 # Help Target
 help:
@@ -324,9 +372,15 @@ help:
 	@echo ... tests/test_knight.obj
 	@echo ... tests/test_knight.i
 	@echo ... tests/test_knight.s
+	@echo ... tests/test_main.obj
+	@echo ... tests/test_main.i
+	@echo ... tests/test_main.s
 	@echo ... tests/test_pawn.obj
 	@echo ... tests/test_pawn.i
 	@echo ... tests/test_pawn.s
+	@echo ... tests/test_rook.obj
+	@echo ... tests/test_rook.i
+	@echo ... tests/test_rook.s
 .PHONY : help
 
 

@@ -9,6 +9,8 @@
 #define ENPASSANT_WHITE 5
 #define ENPASSANT_BLACK 2
 
+uint64_t Board::rook_attacks[TILES][4096];
+
 Board::Board() {
     bitboards[Board::PAWN] = 0x000000000000FF00ULL;
     bitboards[Board::BLACK_PAWN] = 0x00FF000000000000ULL;
@@ -32,10 +34,12 @@ Board::Board() {
         white_bitboard |= bitboards[i];
         black_bitboard |= bitboards[i + Board::BLACK_SHIFT];
     }
-
     for (int i = 0; i < Board::TILES; i++) {
         init_knight_moves(i);
+        rook_masks[i] = find_rook_mask(i);
+        
     }
+    init_rook_moves();
 }
 
 void Board::init_knight_moves(int index) {
@@ -54,6 +58,119 @@ void Board::init_knight_moves(int index) {
         knight_attacks[index] |= (1ULL << to_pos);
     }
 }
+
+void Board::init_rook_moves() {
+    for (int sq = 0; sq < Board::TILES; sq++) {
+        uint64_t mask = rook_masks[sq];
+        int bit_count = num_bits(mask);
+
+        for (int i = 0; i < (1ULL << bit_count); i++) {
+            uint64_t blockers = set_occupancy(mask, bit_count, i);
+
+            uint64_t attacks = find_rook_attacks(sq, blockers);
+
+            int index = (blockers * rook_magic[sq]) >> (Board::TILES - rook_shift[sq]);
+            
+            Board::rook_attacks[sq][index] = attacks;           
+        }
+    }
+}
+
+int Board::num_bits(uint64_t mask) {
+    int count = 0;
+    while (mask) {
+        mask &= (mask - 1);
+        count++;
+    }
+    return count;
+}
+
+uint64_t Board::set_occupancy(uint64_t mask, int bits, int index) {
+    uint64_t result = 0ULL;
+
+    for (int i = 0; i < bits; i++) {
+        int square = pop_bit(&mask);
+        if (index & (1ULL << i)) {
+            result |= (1ULL << square);
+        }
+    }
+
+    return result;
+}
+
+uint64_t Board::find_rook_attacks(int sq, uint64_t blockers) {
+    uint64_t result = 0;
+    int rank = sq / Board::SIDE;
+    int file = sq % Board::SIDE;
+
+    // Scan north
+    for (int i = rank + 1; i < Board::SIDE; i++) {
+        int s = i * Board::SIDE + file;
+        result |= (1ULL << s);
+        if (blockers & (1ULL << s)) break;
+    }
+
+    // Scan east
+    for (int i = file + 1; i < Board::SIDE; i++) {
+        int s = i + rank * Board::SIDE;
+        result |= (1ULL << s);
+        if (blockers & (1ULL << s)) break;
+    }
+    
+    // Scan south
+    for (int i = rank - 1; i >= 0; i--) {
+        int s = i * Board::SIDE + file;
+        result |= (1ULL << s);
+        if (blockers & (1ULL << s)) break;
+    }
+    
+    // Scan west
+    for (int i = file - 1; i >= 0; i--) {
+        int s = i + rank * Board::SIDE;
+        result |= (1ULL << s);
+        if (blockers & (1ULL << s)) break;
+    }
+
+    return result;
+}
+
+int Board::pop_bit(uint64_t *mask) {
+    int index = 0;
+    uint64_t b = *mask;
+
+    while ((b & 1) == 0) {
+        b >>= 1;
+        index++;
+    }
+
+    *mask &= (*mask - 1);
+
+    return index;
+}
+
+uint64_t Board::find_rook_mask(int index) {
+    int file = index % Board::SIDE;
+    int rank = index / Board::SIDE;
+
+    uint64_t result = 0ULL;
+
+    // Horizontal file
+    for (int i = 1; i < Board::SIDE - 1; i++) {
+        if (i != file) {
+            result |= (1ULL << (rank * Board::SIDE + i));
+        }
+    }   
+
+    // Vertical rank
+    for (int i = 1; i < Board::SIDE - 1; i++) {
+        if (i != rank) {
+            result |= (1ULL << (file + Board::SIDE * i));
+        }
+    }
+
+    return result;
+}
+
 
 bool Board::move(Move move, bool is_white) {
     if (!is_legal_move(move, is_white)) {
@@ -244,7 +361,15 @@ bool Board::legal_pawn_move(Move move, bool is_white) {
 }
 
 bool Board::legal_rook_move(Move move, bool is_white) {
-    return false;
+    uint64_t occupancy = white_bitboard | black_bitboard;
+    
+    uint64_t blockers = occupancy & rook_masks[move.from];
+
+    int index = (blockers * rook_magic[move.from]) >> (Board::TILES - rook_shift[move.from]);
+
+    uint64_t attacks = Board::rook_attacks[move.from][index];
+
+    return !((attacks & (1ULL << move.to)) == 0);
 }
 
 bool Board::legal_knight_move(Move move, bool is_white) {

@@ -12,9 +12,11 @@ add_executable(chess_engine src/main.cpp src/board.cpp)
 # ==========================
 
 add_executable(chess_tests 
+    tests/test_main.cpp
     tests/test_board.cpp
     tests/test_pawn.cpp
     tests/test_knight.cpp
+    tests/test_rook.cpp
     tests/catch_amalgamated.cpp  # Add this!
     src/board.cpp
 )
