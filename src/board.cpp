@@ -466,7 +466,7 @@ bool Board::legal_knight_move(Move move, bool is_white) {
 }
 
 bool Board::legal_queen_move(Move move, bool is_white) {
-    return false;
+    return legal_rook_move(move, is_white) || legal_bishop_move(move, is_white);
 }
 
 bool Board::legal_bishop_move(Move move, bool is_white) {

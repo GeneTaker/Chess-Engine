@@ -62,9 +62,9 @@ TEST_CASE("Queen test, blocked queen") {
     bool b2 = board.move(qg4, true);
     bool b3 = board.move(qb2, true);
 
-    REQUIRE(b1);
-    REQUIRE(b2);
-    REQUIRE(b3);
+    REQUIRE_FALSE(b1);
+    REQUIRE_FALSE(b2);
+    REQUIRE_FALSE(b3);
 
     REQUIRE_FALSE((1ULL << 35) & board.get_bitboard(Board::QUEEN));
     REQUIRE_FALSE((1ULL << 30) & board.get_bitboard(Board::QUEEN));

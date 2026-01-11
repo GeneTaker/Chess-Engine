@@ -13,6 +13,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/chess_tests.dir/tests/test_main.cpp.obj.d"
   "CMakeFiles/chess_tests.dir/tests/test_pawn.cpp.obj"
   "CMakeFiles/chess_tests.dir/tests/test_pawn.cpp.obj.d"
+  "CMakeFiles/chess_tests.dir/tests/test_queen.cpp.obj"
+  "CMakeFiles/chess_tests.dir/tests/test_queen.cpp.obj.d"
   "CMakeFiles/chess_tests.dir/tests/test_rook.cpp.obj"
   "CMakeFiles/chess_tests.dir/tests/test_rook.cpp.obj.d"
   "chess_tests.exe"

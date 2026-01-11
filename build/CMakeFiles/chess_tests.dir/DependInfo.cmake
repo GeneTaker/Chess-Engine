@@ -15,6 +15,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "C:/Users/jeffc/Chess-Engine/tests/test_knight.cpp" "CMakeFiles/chess_tests.dir/tests/test_knight.cpp.obj" "gcc" "CMakeFiles/chess_tests.dir/tests/test_knight.cpp.obj.d"
   "C:/Users/jeffc/Chess-Engine/tests/test_main.cpp" "CMakeFiles/chess_tests.dir/tests/test_main.cpp.obj" "gcc" "CMakeFiles/chess_tests.dir/tests/test_main.cpp.obj.d"
   "C:/Users/jeffc/Chess-Engine/tests/test_pawn.cpp" "CMakeFiles/chess_tests.dir/tests/test_pawn.cpp.obj" "gcc" "CMakeFiles/chess_tests.dir/tests/test_pawn.cpp.obj.d"
+  "C:/Users/jeffc/Chess-Engine/tests/test_queen.cpp" "CMakeFiles/chess_tests.dir/tests/test_queen.cpp.obj" "gcc" "CMakeFiles/chess_tests.dir/tests/test_queen.cpp.obj.d"
   "C:/Users/jeffc/Chess-Engine/tests/test_rook.cpp" "CMakeFiles/chess_tests.dir/tests/test_rook.cpp.obj" "gcc" "CMakeFiles/chess_tests.dir/tests/test_rook.cpp.obj.d"
   )
 
