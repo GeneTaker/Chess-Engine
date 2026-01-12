@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include "move.h"
+#include <vector>
 
 using namespace std;
 
@@ -24,6 +25,7 @@ private:
     static constexpr uint64_t FILE_H = 0x8080808080808080ULL;
 
     uint64_t knight_attacks[TILES] = {};
+    uint64_t king_attacks[TILES] = {};
 
     uint16_t enpassant = 0;
 
@@ -94,6 +96,18 @@ private:
         6, 5, 5, 5, 5, 5, 5, 6
     };
 
+    uint64_t pawn_attacks[SIDES][TILES];
+    
+    static constexpr int CASTLE_WS = (1ULL << 0);
+    static constexpr int CASTLE_WL = (1ULL << 1);
+    static constexpr int CASTLE_BS = (1ULL << 2);
+    static constexpr int CASTLE_BL = (1ULL << 3);
+    uint8_t castle_rights = 0;
+
+    int turns_since_capture = 0;
+
+    vector<PastMove> move_history;
+    
     bool is_legal_move(Move move, bool is_white);
     bool legal_pawn_move(Move move, bool is_white);
     bool legal_rook_move(Move move, bool is_white);
@@ -109,6 +123,9 @@ private:
     void init_knight_moves(int index);
     void init_rook_moves(); 
     void init_bishop_moves(); 
+    void init_king_moves(); 
+    void init_pawn_attacks();
+    void pawn_helper(vector<int> offsets, int colour, int index)
     
     int num_bits(uint64_t mask);
 
@@ -121,7 +138,8 @@ private:
 
     uint64_t find_rook_mask(int index);
     uint64_t find_bishop_mask(int index);
-    
+
+    bool is_attacked(int square, bool is_white);
 
 public:
     
@@ -158,6 +176,15 @@ public:
 
     // returns the index of a coloured piecetype within the bitboard array
     constexpr int bb_index(int type, bool is_white);
+
+    // returns whether or not it is currently checkmate
+    bool in_check(bool is_white);
+
+    // reverts the board to its state before the last made move
+    void unmake_move();
+
+    // gets the number of turns since the last made capture
+    int get_turns_since_capture();
 };
 
 #endif

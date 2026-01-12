@@ -79,6 +79,35 @@ void Board::init_rook_moves() {
     }
 }
 
+void Board::init_pawn_attacks() {
+    vector<int> white_offsets = {7, 9};
+    vector<int> black_offsets = {-7, -9};
+
+    for (int i = 0; i < Board::TILES; i++) {
+        int white = 0;
+        int black = 1;
+        
+        pawn_helper(white_offsets, white, i);
+        pawn_helper(black_offsets, black, i);
+    }
+}
+
+void Board::pawn_helper(vector<int> offsets, int colour, int index) {
+    int from_file = index % Board::SIDE;
+
+    for (int a : offsets) {
+        int to_pos = a + index;
+
+        if (to_pos < 0 || to_pos >= Board::TILES) continue;
+
+        int file = to_pos % Board::SIDE;
+
+        if (abs(file - from_file) < DOUBLE) {
+            pawn_attacks[colour][index] |= (1ULL << to_pos); 
+        }
+    }
+}
+
 int Board::num_bits(uint64_t mask) {
     int count = 0;
     while (mask) {
@@ -257,6 +286,25 @@ uint64_t Board::find_bishop_mask(int index) {
     return result;
 }
 
+void Board::init_king_moves() {
+    vector<int> offsets = {-9, -8, -7, -1, 1, 7, 8, 9};
+    
+    for (int i = 0; i < Board::TILES; i++) {
+        for (int o : offsets) {
+            int to_pos = i + o;
+
+            if (to_pos >= Board::TILES || to_pos < 0) continue;
+
+            int to_file = to_pos % Board::SIDE;
+            int from_file = i % Board::SIDE;
+
+            if (abs(to_file - from_file) >= DOUBLE) continue;
+
+            king_attacks[index] |= (1ULL << to_pos);
+        }
+    }
+}
+
 
 bool Board::move(Move move, bool is_white) {
     if (!is_legal_move(move, is_white)) {
@@ -268,6 +316,9 @@ bool Board::move(Move move, bool is_white) {
     
     uint64_t* own;
     uint64_t* opp;
+
+    int captured_piece = NONE;
+    int captured_square = NONE;
     
     // check if we can promote
     if (is_white) {
@@ -318,6 +369,10 @@ bool Board::move(Move move, bool is_white) {
         for (int i = 0; i < Board::PIECES; i++) {
             if (bitboards[i + opp_offset] & to_mask) {
                 bitboards[i + opp_offset] ^= to_mask; 
+
+                captured_piece = i + opp_offset;
+                captured_square = move.to;
+
                 break;
             }
         }
@@ -326,6 +381,8 @@ bool Board::move(Move move, bool is_white) {
     if (can_enpassant) {
         uint64_t capture_mask = 1ULL << captured_pawn;
         *opp ^= capture_mask;
+        captured_piece = Board::PAWN + opp_offset;
+        captured_square = captured_pawn;
         bitboards[Board::PAWN + opp_offset] ^= capture_mask;
     }
 
@@ -341,6 +398,15 @@ bool Board::move(Move move, bool is_white) {
         bitboards[move.type + own_offset] ^= to_mask;
         bitboards[move.promotion + own_offset] |= to_mask;
     }
+    
+    if (captured_piece == NONE || move.type == Board::PAWN) {
+        turns_since_capture = 0;
+    } else {
+        turns_since_capture++;
+    }
+
+    PastMove current_move(move, captured_piece, captured_square, castle_rights, turns_since_capture);
+    move_history.push_back(current_move);
     
     return true;
 }
@@ -360,6 +426,9 @@ bool Board::is_legal_move(Move move, bool is_white) {
     
     // now check if it is a valid destination
     if (move.to >= TILES || move.to < 0) return false;
+
+    // TODO
+    // check if illegal move?
 
     // check if it is a valid move
     switch (move.type) {
@@ -383,6 +452,37 @@ bool Board::is_legal_move(Move move, bool is_white) {
         default:
             break;
     }    
+    return false;
+}
+
+bool Board::is_attacked(int square, bool is_white) {
+    int opp_offset = (is_white) ? Board::BLACK_SHIFT : 0;
+       
+    uint64_t opp_pawns = bitboards[opp_offset + Board::PAWN];
+    uint64_t opp_rooks = bitboards[opp_offset + Board::ROOK];
+    uint64_t opp_bishops = bitboards[opp_offset + Board::BISHOP];
+    uint64_t opp_knights = bitboards[opp_offset + Board::KNIGHT];
+    uint64_t opp_queens = bitboards[opp_offset + Board::QUEEN];
+    uint64_t opp_king = bitboards[opp_offset + Board::KING];
+
+    int opp = (is_white) ? 1 : 0;
+
+    uint64_t square_mask = 1ULL << square;
+    if (opp_pawns & pawn_attacks[opp][square]) return true;
+    if (opp_knights & knight_attacks[square]) return true;
+    if (opp_king & king_attacks[square]) return true;
+
+    uint64_t occupied = white_bitboard | black_bitboard;
+    // Bishops/queens
+    uint64_t bishop_blockers = occupied & bishop_masks[square];
+    int bishop_index = (bishop_blockers * bishop_magic[square]) >> (Board::TILES - bishop_shift[square]);
+    if (bishop_attacks[square][bishop_index] & (opp_bishops | opp_queens)) return true;
+    
+    // Rooks/queens
+    uint64_t rook_blockers = occupied & rook_masks[square];
+    int rook_index = (rook_blockers * rook_magic[square]) >> (Board::TILES - rook_shift[square]);
+    if (rook_attacks[square][rook_index] & (opp_rooks | opp_queens)) return true;
+    
     return false;
 }
 
@@ -481,7 +581,26 @@ bool Board::legal_bishop_move(Move move, bool is_white) {
 }
 
 bool Board::legal_king_move(Move move, bool is_white) {
-    return false;
+    uint64_t attacks = king_attacks[move.from];
+    uint64_t to_mask = 1ULL << move.to;
+
+    if (is_white) {
+        if (Board::CASTLE_WS & castle_rights && move.to == 6) {
+            return true;
+        }
+        if (Board::CASTLE_WL & castle_rights && move.to == 2) {
+            return true;
+        }
+    } else {
+        if (Board::CASTLE_BS & castle_rights && move.to == 62) {
+            return true;
+        }
+        if (Board::CASTLE_BL & castle_rights && move.to == 58) {
+            return true;
+        }
+    }
+
+    return ((to_mask & attacks) != 0);
 }
 
 
@@ -518,4 +637,80 @@ constexpr int Board::bb_index(int type, bool is_white) {
     return offset + type;
 }
 
+bool Board::in_check(bool is_white) {
+    int own_offset = (is_white) ? 0 : BLACK_SHIFT;
+
+    uint64_t own_king_board = bitboards[own_offset + Board::KING];
+    int king_square = pop_bit(&own_king_board);   
+
+    return is_attacked(king_square, is_white);
+}
+
+void Board::unmake_move() {
+    PastMove last_move = move_history.back();
+    move_history.pop_back();
+
+    uint64_t to_mask = 1ULL << last_move.to;
+    uint64_t from_mask = 1ULL << last_move.from;
+
+    int colour = last_move.piece_moved / Board::PIECES;
+
+    uint64_t* own_board;
+    uint64_t* opp_board;
+
+    if (colour == 0) {
+        own_board = &white_bitboard;
+        opp_board = &black_bitboard;
+    } else {
+        own_board = &black_bitboard;
+        opp_board = &white_bitboard;
+    }
+
+    bitboards[last_move.piece_moved] |= from_mask;
+    *own_board |= from_mask;
+    *own_board ^= to_mask;
+
+    if (last_move.promotion_piece != NONE) {
+        bitboards[last_move.promotion_piece] ^= to_mask;
+    } else {
+        bitboards[last_move.piece_moved] ^= to_mask;
+    }
+
+    if (last_move.captured_square != NONE) {
+        int restore = last_move.captured_piece;
+        bitboards[restore] |= 1ULL << last_move.captured_square;
+        *opp_board |= 1ULL << last_move.captured_square;
+    }
+
+    turns_since_capture = last_move.turn_count;
+
+    int own_offset = colour * Board::PIECES;
+
+    if (last_move.piece_moved == Board::KING && abs(last_move.to - last_move.from) == DOUBLE) {
+        int castled_rook = (last_move.to + last_move.from) / 2;
+        uint64_t castled_rook_mask = 1ULL << castled_rook;
+
+        bitboards[own_offset + Board::ROOK] ^= castled_rook_mask;
+        *own_board ^= castled_rook_mask;
+        
+        int rook_from, rook_to;
+
+        if (last_move.to > last_move.from) {
+            rook_from = last_move.from + 3;
+            rook_to   = last_move.from + 1;
+        } else {
+            rook_from = last_move.from - 4;
+            rook_to   = last_move.from - 1;
+        }
+
+        bitboards[own_offset + Board::ROOK] |= (1ULL << rook_from);
+        *own_board |= (1ULL << rook_from);
+    }
+
+    castle_rights = last_move.castle_rights;
+}
+
+int get_turns_since_capture() {
+    return turns_since_capture;
+}
 
