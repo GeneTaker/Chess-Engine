@@ -167,16 +167,8 @@ uint64_t Board::find_rook_attacks(int sq, uint64_t blockers) {
 }
 
 int Board::pop_bit(uint64_t *mask) {
-    int index = 0;
-    uint64_t b = *mask;
-    
-    while ((b & 1) == 0) {
-        b >>= 1;
-        index++;
-    }
-    
-    *mask &= (*mask - 1);
-    
+    int index = __builtin_ctzll(*mask);
+    *mask &= (*mask - 1);     
     return index;
 }
 
@@ -305,12 +297,17 @@ void Board::init_king_moves() {
     }
 }
 
-
 bool Board::move(Move move, bool is_white) {
     if (!is_legal_move(move, is_white)) {
         return false;
     }
     
+    make_move_unchecked(move, is_white);
+    
+    return true;
+}
+
+void Board::make_move_unchecked(Move move, bool is_white) {
     uint64_t from_mask = 1ULL << move.from;
     uint64_t to_mask = 1ULL << move.to;
     
@@ -319,6 +316,8 @@ bool Board::move(Move move, bool is_white) {
 
     int captured_piece = NONE;
     int captured_square = NONE;
+
+    uint8_t old_castle_rights = castle_rights;
     
     // check if we can promote
     if (is_white) {
@@ -378,6 +377,41 @@ bool Board::move(Move move, bool is_white) {
         }
     }
 
+    if (move.type == Board::KING && abs(move.to - move.from) == DOUBLE) {
+        int castled_rook = (move.to + move.from) / 2;
+        uint64_t castled_rook_mask = 1ULL << castled_rook;
+
+        bitboards[own_offset + Board::ROOK] |= castled_rook_mask;
+        *own |= castled_rook_mask;
+        
+        int rook_from, rook_to;
+
+        if (move.to > move.from) {
+            rook_from = move.from + 3;
+            rook_to   = move.from + 1;
+        } else {
+            rook_from = move.from - 4;
+            rook_to   = move.from - 1;
+        }
+
+        bitboards[own_offset + Board::ROOK] ^= (1ULL << rook_from);
+        *own ^= (1ULL << rook_from);
+    }
+
+    //castling
+    if (move.type == Board::KING) {
+        uint8_t remove = (is_white) ? ~(CASTLE_WS | CASTLE_WL) : ~(CASTLE_BS | CASTLE_BL);
+        castle_rights &= remove;
+    }
+
+    // remove a castling right if a corner rook moves 
+    if (move.type == Board::ROOK) {
+        if (move.from == 0) castle_rights &= ~Board::CASTLE_WL;
+        if (move.from == 7) castle_rights &= ~Board::CASTLE_WS;
+        if (move.from == 56) castle_rights &= ~Board::CASTLE_BL;
+        if (move.from == 63) castle_rights &= ~Board::CASTLE_BS;
+    }
+
     if (can_enpassant) {
         uint64_t capture_mask = 1ULL << captured_pawn;
         *opp ^= capture_mask;
@@ -399,16 +433,22 @@ bool Board::move(Move move, bool is_white) {
         bitboards[move.promotion + own_offset] |= to_mask;
     }
     
-    if (captured_piece == NONE || move.type == Board::PAWN) {
+    if (captured_piece != NONE || move.type == Board::PAWN) {
         turns_since_capture = 0;
     } else {
         turns_since_capture++;
     }
 
-    PastMove current_move(move, captured_piece, captured_square, castle_rights, turns_since_capture);
+    // removes a castling right if a corner rook is captured 
+    if (captured_piece % Board::PIECES == Board::ROOK) {
+        if (captured_square == 0) castle_rights &= ~CASTLE_WL;
+        if (captured_square == 7) castle_rights &= ~CASTLE_WS;
+        if (captured_square == 56) castle_rights &= ~CASTLE_BL;
+        if (captured_square == 63) castle_rights &= ~CASTLE_BS;
+    }
+
+    PastMove current_move(move, captured_piece, captured_square, old_castle_rights, turns_since_capture, enpassant);
     move_history.push_back(current_move);
-    
-    return true;
 }
 
 bool Board::is_legal_move(Move move, bool is_white) {
@@ -427,32 +467,48 @@ bool Board::is_legal_move(Move move, bool is_white) {
     // now check if it is a valid destination
     if (move.to >= TILES || move.to < 0) return false;
 
-    // TODO
-    // check if illegal move?
-
     // check if it is a valid move
+    bool legal = false;
+
     switch (move.type) {
         case Board::PAWN:
-            return legal_pawn_move(move, is_white);
-        
+            legal = legal_pawn_move(move, is_white);
+            break;        
         case Board::ROOK:
-            return legal_rook_move(move, is_white);
-        
+            legal = legal_rook_move(move, is_white);
+            break;
         case Board::KNIGHT:
-            return legal_knight_move(move, is_white);
-        
+            legal = legal_knight_move(move, is_white);
+            break;
         case Board::BISHOP:
-            return legal_bishop_move(move, is_white);
-        
+            legal = legal_bishop_move(move, is_white);
+            break;
         case Board::QUEEN:
-            return legal_queen_move(move, is_white);
-        
+            legal = legal_queen_move(move, is_white);
+            break;
         case Board::KING:
-            return legal_king_move(move, is_white);
+            legal = legal_king_move(move, is_white);
+            break;
         default:
             break;
     }    
-    return false;
+
+    if (!legal) return false;
+
+    return check_evade(move, is_white);
+}
+
+bool check_evade(Move m, bool is_white) {
+    make_move_unchecked(m, is_white);
+
+    bool result = true;
+
+    if (in_check(is_white)) {
+        result = false;
+    }
+
+    unmake_move();
+    return result;
 }
 
 bool Board::is_attacked(int square, bool is_white) {
@@ -603,7 +659,6 @@ bool Board::legal_king_move(Move move, bool is_white) {
     return ((to_mask & attacks) != 0);
 }
 
-
 bool Board::can_promote(Move move, bool is_white) {
     if (move.type != Board::PAWN && move.type != Board::BLACK_PAWN) return false;
 
@@ -708,9 +763,25 @@ void Board::unmake_move() {
     }
 
     castle_rights = last_move.castle_rights;
+    enpassant = last_move.enpassant;
 }
 
 int get_turns_since_capture() {
     return turns_since_capture;
 }
+
+// bool Board::is_checkmate(bool is_white) {
+//     if (!in_check()) {
+//         return false;
+//     }
+
+//     for ()
+// }
+// bool Board::is_stalemate(bool is_white) {
+//     if (!in_check()) {
+//         return false;
+//     }
+
+//     for ()
+// }
 

@@ -1,0 +1,155 @@
+#include "move.h"
+#include "../include/board.h"
+#include "../include/move_generator.h"
+#include <vector>
+
+#define UP 1
+#define DOWN -1
+
+#define NORTH 8
+#define EAST 1
+#define SOUTH -8
+#define WEST -1
+
+int MoveGenerator::pop_bit(uint64_t *mask) {
+    int index = __builtin_ctzll(*mask);
+    *mask &= (*mask - 1);     
+    return index;
+}
+
+void MoveGenerator::generate_pawn_moves(int from, bool is_white, vector<Move>& moves) {
+    int direction = (is_white) ? UP : DOWN;
+    
+    vector<int> offsets = {7, 8, 9, 16};
+
+    for (int o : offsets) {
+        Move m(from, from + o * direction, Board::PAWN);
+        moves.push_back(m);
+    }
+}
+void MoveGenerator::generate_knight_moves(int from, bool is_white, vector<Move>& moves) {
+    vector<int> offsets = {6, 10, 15, 17};
+
+    for (int o : offsets) {
+        Move m1(from, from + o, Board::KNIGHT);
+        Move m2(from, from - o, Board::KNIGHT);
+
+        moves.push_back(m1);
+        moves.push_back(m2);
+    }
+}
+
+void MoveGenerator::generate_rook_moves(int from, bool is_white, vector<Move>& moves) {
+    generate_cardinals(from, moves, Board::ROOK);
+}
+
+void MoveGenerator::generate_cardinals(int from, vector<Move>& moves, int piece) {
+    int file = from % Board::SIDE;
+    int rank = from / Board::SIDE;
+    
+    for (int r = 0; r < Board::SIDE; r++) {
+        if (r != rank) {
+            Move m(from, r * Board::SIDE + file, piece);
+            moves.push_back(m);
+        }
+    }
+    
+    for (int f = 0; f < Board::SIDE; f++) {
+        if (f != file) {
+            Move m(from, rank * Board::SIDE + f, piece);
+            moves.push_back(m);
+        }
+    }
+    
+}
+
+void MoveGenerator::generate_bishop_moves(int from, bool is_white, vector<Move>& moves) {
+    generate_diagonals(from, moves, Board::BISHOP);
+}
+
+
+void MoveGenerator::generate_diagonals(int from, vector<Move>& moves, int piece) {
+    int file = from % Board::SIDE;
+    int rank = from / Board::SIDE;
+    
+    //NE
+    for (int x = file + 1, y = rank + 1; x < Board::SIDE && y < Board::SIDE; x++, y++) {
+        Move m(from, x + Board::SIDE * y, piece);
+        moves.push_back(m);
+    }
+    
+    //NW
+    for (int x = file - 1, y = rank + 1; x >= 0 && y < Board::SIDE; x--, y++) {
+        Move m(from, x + Board::SIDE * y, piece);
+        moves.push_back(m);
+    }
+    
+    //SW
+    for (int x = file - 1, y = rank - 1; x >= 0 && y >= 0; x--, y--) {
+        Move m(from, x + Board::SIDE * y, piece);
+        moves.push_back(m);
+    }
+    
+    //SE    
+    for (int x = file + 1, y = rank - 1; x < Board::SIDE && y >= 0; x++, y--) {
+        Move m(from, x + Board::SIDE * y, piece);
+        moves.push_back(m);
+    }    
+
+}
+
+
+void MoveGenerator::generate_queen_moves(int from, bool is_white, vector<Move>& moves) {
+    generate_diagonals(from, moves, Board::QUEEN);
+    generate_cardinals(from, moves, Board::QUEEN);
+}
+
+void MoveGenerator::generate_king_moves(int from, bool is_white, vector<Move>& moves) {
+    vector<int> offsets = {1, 7, 8, 9};
+
+    for (int o : offsets) {
+        Move pos(from, from + o, Board::KING);
+        Move neg(from, from - o, Board::KING);
+
+        moves.push_back(pos);
+        moves.push_back(neg);
+    }
+}
+
+vector<Move> MoveGenerator::generate_moves(Board& board, bool is_white) {
+    vector<Move> result;
+
+    for (int i = 0; i < Board::PIECES; i++) {
+        int index = board.bb_index(i, is_white);
+        uint64_t bitboard = board.get_bitboard(index);
+        uint64_t temp = bitboard;
+
+        while (temp != 0) {
+            int from = pop_bit(&temp);
+            uint64_t from_mask = 1ULL << from;
+
+            switch (i) {
+                case Board::PAWN:
+                    generate_pawn_moves(from, is_white, result);
+                    break;  
+                case Board::ROOK:
+                    generate_rook_moves(from, is_white, result);
+                    break;  
+                case Board::BISHOP:
+                    generate_bishop_moves(from, is_white, result);
+                    break;  
+                case Board::KNIGHT:
+                    generate_knight_moves(from, is_white, result);
+                    break;  
+                case Board::QUEEN:
+                    generate_queen_moves(from, is_white, result);
+                    break;  
+                case Board::KING:
+                    generate_king_moves(from, is_white, result);
+                    break;  
+            }
+        }
+    }
+
+    return result;
+}

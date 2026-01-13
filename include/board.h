@@ -6,20 +6,19 @@
 #include <string>
 #include "move.h"
 #include <vector>
+#include "past_move.h"
 
 using namespace std;
 
 class Board {
 private:
     static constexpr int UNIQUE_PIECES = 12;
-    static constexpr int PIECES = 6;
 
     uint64_t bitboards[UNIQUE_PIECES] = {};
     uint64_t white_bitboard = 0ULL;
     uint64_t black_bitboard = 0ULL;
 
     static constexpr int TILES = 64;
-    static constexpr int SIDE = 8;
 
     static constexpr uint64_t FILE_A = 0x0101010101010101ULL;
     static constexpr uint64_t FILE_H = 0x8080808080808080ULL;
@@ -141,6 +140,9 @@ private:
 
     bool is_attacked(int square, bool is_white);
 
+    bool check_evade(Move move, bool is_white);
+
+
 public:
     
     static constexpr int PAWN = 0;
@@ -150,6 +152,10 @@ public:
     static constexpr int QUEEN = 4;
     static constexpr int KING = 5;
     static constexpr int BLACK_SHIFT = 6;
+    static constexpr int PIECES = 6;
+    static constexpr int SIDE = 8;
+
+
 
     static constexpr int BLACK_PAWN = PAWN + BLACK_SHIFT;
     static constexpr int BLACK_ROOK = ROOK + BLACK_SHIFT;
@@ -164,6 +170,10 @@ public:
 
     // updates the board with a move
     bool move(Move move, bool is_white);
+
+    // makes a move regardless of legality
+    void make_move_unchecked(Move move, bool is_white);
+
 
     // prints all bitboards for debugging purposes
     void print_bitboards();
@@ -185,6 +195,10 @@ public:
 
     // gets the number of turns since the last made capture
     int get_turns_since_capture();
+
+    bool is_checkmate(bool is_white);
+
+    bool is_stalemate(bool is_white);
 };
 
 #endif
