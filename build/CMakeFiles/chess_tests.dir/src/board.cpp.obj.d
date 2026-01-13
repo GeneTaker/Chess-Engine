@@ -158,6 +158,9 @@ CMakeFiles/chess_tests.dir/src/board.cpp.obj: \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stl_vector.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stl_bvector.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/vector.tcc \
+ C:/Users/jeffc/Chess-Engine/include/past_move.h \
+ C:/Users/jeffc/Chess-Engine/include/move_generator.h \
+ C:/Users/jeffc/Chess-Engine/include/board.h \
  C:/msys64/mingw64/include/c++/15.2.0/algorithm \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stl_algo.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/algorithmfwd.h \

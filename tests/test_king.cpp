@@ -63,14 +63,14 @@ TEST_CASE("King test, test check and illegal moves") {
     REQUIRE_FALSE(b1);
     REQUIRE_FALSE(b2);
 
-    bool checkmate = board.is_check_mate();
+    bool checkmate = board.is_checkmate(false);
     REQUIRE_FALSE(checkmate);
 
     Move kxf7(60, 53, Board::KING);
     bool b3 = board.move(kxf7, false);
     REQUIRE(b3);
 
-    checkmate = board.is_checkmate();
+    checkmate = board.is_checkmate(false);
     REQUIRE_FALSE(checkmate);
 
     REQUIRE((1ULL << 53) & board.get_bitboard(Board::BLACK_KING));
@@ -89,9 +89,9 @@ TEST_CASE("King test, test checkmate") {
 
     Move qxf7(21, 53, Board::QUEEN);
     
-    board.move(qxf7);
+    board.move(qxf7, true);
 
-    bool mate = board.is_checkmate();
+    bool mate = board.is_checkmate(false);
     REQUIRE(mate);
 
     Move kxf7(60, 53, Board::KING);
@@ -113,13 +113,28 @@ TEST_CASE("King test, test castling both ways") {
     board.move(e4, true);
     board.move(d4, true);
     board.move(qf3, true);
+    // std::cout << board.in_check(true) << endl;
+    // std::cout << board.is_attacked(3, true) << "<- 3 is attacked" << endl;
+    // std::cout << board.is_attacked(2, true) << "<- 2 is attacked" << endl;
+    // std::cout << board.get_occupancy(true) << endl;
+    std::cout << "-------------------" << endl;
     board.move(be3, true);
+    // std::cout << board.in_check(true) << endl;
+    // std::cout << board.is_attacked(3, true) << "<- 3 is attacked" << endl;
+    // std::cout << board.is_attacked(2, true) << "<- 2 is attacked" << endl;
+    // std::cout << board.get_occupancy(true) << endl;
+    // std::cout << "-------------------" << endl;
     board.move(nc3, true);
 
     //castle long
 
     Move o_o_o(4, 2, Board::KING);
     bool b = board.move(o_o_o, true);
+    // std::cout << board.in_check(true) << endl;
+    // std::cout << board.is_attacked(3, true) << "<- 3 is attacked" << endl;
+    // std::cout << board.is_attacked(2, true) << "<- 2 is attacked" << endl;
+    // std::cout << board.get_occupancy(true) << endl;
+    
     REQUIRE(b);
     
     REQUIRE(board.get_bitboard(Board::KING) & (1ULL << 2));
@@ -131,7 +146,7 @@ TEST_CASE("King test, test castling both ways") {
     Move e5(52, 36, Board::PAWN);
     Move nf6(62, 45, Board::KNIGHT);
     Move bd6(61, 43, Board::BISHOP);
-    Move o_o(60, 62, Board::KING);
+    Move o_o(60, 62, Board::KING); 
 
     board.move(e5, false);
     board.move(nf6, false);

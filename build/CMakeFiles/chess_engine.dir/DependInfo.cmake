@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "C:/Users/jeffc/Chess-Engine/src/board.cpp" "CMakeFiles/chess_engine.dir/src/board.cpp.obj" "gcc" "CMakeFiles/chess_engine.dir/src/board.cpp.obj.d"
   "C:/Users/jeffc/Chess-Engine/src/main.cpp" "CMakeFiles/chess_engine.dir/src/main.cpp.obj" "gcc" "CMakeFiles/chess_engine.dir/src/main.cpp.obj.d"
+  "C:/Users/jeffc/Chess-Engine/src/move_generator.cpp" "CMakeFiles/chess_engine.dir/src/move_generator.cpp.obj" "gcc" "CMakeFiles/chess_engine.dir/src/move_generator.cpp.obj.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

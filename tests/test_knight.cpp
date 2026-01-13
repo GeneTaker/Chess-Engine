@@ -32,8 +32,11 @@ TEST_CASE("Knight test, ensure all knights are functional") {
     Move m4(62, 45, Board::KNIGHT);
 
     board.move(m1, true);
+    
     board.move(m3, false);
+    
     board.move(m2, true);
+    
     board.move(m4, false);
 
     uint64_t white_knights = board.get_bitboard(Board::KNIGHT);

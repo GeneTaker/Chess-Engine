@@ -1,4 +1,3 @@
-#include "move.h"
 #include "../include/board.h"
 #include "../include/move_generator.h"
 #include <vector>
@@ -17,18 +16,18 @@ int MoveGenerator::pop_bit(uint64_t *mask) {
     return index;
 }
 
-void MoveGenerator::generate_pawn_moves(int from, bool is_white, vector<Move>& moves) {
+void MoveGenerator::generate_pawn_moves(int from, bool is_white, std::vector<Move>& moves) {
     int direction = (is_white) ? UP : DOWN;
     
-    vector<int> offsets = {7, 8, 9, 16};
+    std::vector<int> offsets = {7, 8, 9, 16};
 
     for (int o : offsets) {
         Move m(from, from + o * direction, Board::PAWN);
         moves.push_back(m);
     }
 }
-void MoveGenerator::generate_knight_moves(int from, bool is_white, vector<Move>& moves) {
-    vector<int> offsets = {6, 10, 15, 17};
+void MoveGenerator::generate_knight_moves(int from, bool is_white, std::vector<Move>& moves) {
+    std::vector<int> offsets = {6, 10, 15, 17};
 
     for (int o : offsets) {
         Move m1(from, from + o, Board::KNIGHT);
@@ -39,11 +38,11 @@ void MoveGenerator::generate_knight_moves(int from, bool is_white, vector<Move>&
     }
 }
 
-void MoveGenerator::generate_rook_moves(int from, bool is_white, vector<Move>& moves) {
+void MoveGenerator::generate_rook_moves(int from, bool is_white, std::vector<Move>& moves) {
     generate_cardinals(from, moves, Board::ROOK);
 }
 
-void MoveGenerator::generate_cardinals(int from, vector<Move>& moves, int piece) {
+void MoveGenerator::generate_cardinals(int from, std::vector<Move>& moves, int piece) {
     int file = from % Board::SIDE;
     int rank = from / Board::SIDE;
     
@@ -63,12 +62,12 @@ void MoveGenerator::generate_cardinals(int from, vector<Move>& moves, int piece)
     
 }
 
-void MoveGenerator::generate_bishop_moves(int from, bool is_white, vector<Move>& moves) {
+void MoveGenerator::generate_bishop_moves(int from, bool is_white, std::vector<Move>& moves) {
     generate_diagonals(from, moves, Board::BISHOP);
 }
 
 
-void MoveGenerator::generate_diagonals(int from, vector<Move>& moves, int piece) {
+void MoveGenerator::generate_diagonals(int from, std::vector<Move>& moves, int piece) {
     int file = from % Board::SIDE;
     int rank = from / Board::SIDE;
     
@@ -99,13 +98,13 @@ void MoveGenerator::generate_diagonals(int from, vector<Move>& moves, int piece)
 }
 
 
-void MoveGenerator::generate_queen_moves(int from, bool is_white, vector<Move>& moves) {
+void MoveGenerator::generate_queen_moves(int from, bool is_white, std::vector<Move>& moves) {
     generate_diagonals(from, moves, Board::QUEEN);
     generate_cardinals(from, moves, Board::QUEEN);
 }
 
-void MoveGenerator::generate_king_moves(int from, bool is_white, vector<Move>& moves) {
-    vector<int> offsets = {1, 7, 8, 9};
+void MoveGenerator::generate_king_moves(int from, bool is_white, std::vector<Move>& moves) {
+    std::vector<int> offsets = {1, 7, 8, 9};
 
     for (int o : offsets) {
         Move pos(from, from + o, Board::KING);
@@ -116,8 +115,8 @@ void MoveGenerator::generate_king_moves(int from, bool is_white, vector<Move>& m
     }
 }
 
-vector<Move> MoveGenerator::generate_moves(Board& board, bool is_white) {
-    vector<Move> result;
+std::vector<Move> MoveGenerator::generate_moves(Board& board, bool is_white) {
+    std::vector<Move> result;
 
     for (int i = 0; i < Board::PIECES; i++) {
         int index = board.bb_index(i, is_white);

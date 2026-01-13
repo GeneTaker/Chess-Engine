@@ -43,6 +43,8 @@ Board::Board() {
     }
     init_rook_moves();
     init_bishop_moves();
+    init_pawn_attacks();
+    init_king_moves();
 }
 
 void Board::init_knight_moves(int index) {
@@ -102,7 +104,7 @@ void Board::pawn_helper(vector<int> offsets, int colour, int index) {
 
         int file = to_pos % Board::SIDE;
 
-        if (abs(file - from_file) < DOUBLE) {
+        if (abs(file - from_file) == 1) {
             pawn_attacks[colour][index] |= (1ULL << to_pos); 
         }
     }
@@ -292,7 +294,7 @@ void Board::init_king_moves() {
 
             if (abs(to_file - from_file) >= DOUBLE) continue;
 
-            king_attacks[index] |= (1ULL << to_pos);
+            king_attacks[i] |= (1ULL << to_pos);
         }
     }
 }
@@ -318,6 +320,7 @@ void Board::make_move_unchecked(Move move, bool is_white) {
     int captured_square = NONE;
 
     uint8_t old_castle_rights = castle_rights;
+    uint16_t old_passant = enpassant;
     
     // check if we can promote
     if (is_white) {
@@ -447,7 +450,7 @@ void Board::make_move_unchecked(Move move, bool is_white) {
         if (captured_square == 63) castle_rights &= ~CASTLE_BS;
     }
 
-    PastMove current_move(move, captured_piece, captured_square, old_castle_rights, turns_since_capture, enpassant);
+    PastMove current_move(move, own_offset + move.type, captured_piece, captured_square, old_castle_rights, turns_since_capture, old_passant);
     move_history.push_back(current_move);
 }
 
@@ -498,7 +501,7 @@ bool Board::is_legal_move(Move move, bool is_white) {
     return check_evade(move, is_white);
 }
 
-bool check_evade(Move m, bool is_white) {
+bool Board::check_evade(Move m, bool is_white) {
     make_move_unchecked(m, is_white);
 
     bool result = true;
@@ -521,10 +524,10 @@ bool Board::is_attacked(int square, bool is_white) {
     uint64_t opp_queens = bitboards[opp_offset + Board::QUEEN];
     uint64_t opp_king = bitboards[opp_offset + Board::KING];
 
-    int opp = (is_white) ? 1 : 0;
+    int own = (is_white) ? 0 : 1;
 
     uint64_t square_mask = 1ULL << square;
-    if (opp_pawns & pawn_attacks[opp][square]) return true;
+    if (opp_pawns & pawn_attacks[own][square]) return true;
     if (opp_knights & knight_attacks[square]) return true;
     if (opp_king & king_attacks[square]) return true;
 
@@ -640,19 +643,32 @@ bool Board::legal_king_move(Move move, bool is_white) {
     uint64_t attacks = king_attacks[move.from];
     uint64_t to_mask = 1ULL << move.to;
 
-    if (is_white) {
-        if (Board::CASTLE_WS & castle_rights && move.to == 6) {
-            return true;
-        }
-        if (Board::CASTLE_WL & castle_rights && move.to == 2) {
-            return true;
-        }
-    } else {
-        if (Board::CASTLE_BS & castle_rights && move.to == 62) {
-            return true;
-        }
-        if (Board::CASTLE_BL & castle_rights && move.to == 58) {
-            return true;
+    uint64_t occupied = white_bitboard | black_bitboard;
+
+    if (!in_check(is_white)) {
+
+        if (is_white) {
+            if (Board::CASTLE_WS & castle_rights && move.to == 6) {
+                uint64_t short_mask = 0x60ULL;
+                if (is_attacked(5, is_white)) return false;
+                return (short_mask & occupied) == 0;
+            }
+            if (Board::CASTLE_WL & castle_rights && move.to == 2) {
+                uint64_t long_mask = 0xEULL;
+                if (is_attacked(3, is_white)) return false;
+                return (long_mask & occupied) == 0;
+            }
+        } else {
+            if (Board::CASTLE_BS & castle_rights && move.to == 62) {
+                uint64_t short_mask = 0x60ULL << (Board::TILES - 5);
+                if (is_attacked(61, is_white)) return false;
+                return (short_mask & occupied) == 0;
+            }
+            if (Board::CASTLE_BL & castle_rights && move.to == 58) {
+                uint64_t long_mask = 0xEULL << (Board::TILES - Board::SIDE);
+                if (is_attacked(59, is_white)) return false;
+                return (long_mask & occupied) == 0;
+            }
         }
     }
 
@@ -696,7 +712,8 @@ bool Board::in_check(bool is_white) {
     int own_offset = (is_white) ? 0 : BLACK_SHIFT;
 
     uint64_t own_king_board = bitboards[own_offset + Board::KING];
-    int king_square = pop_bit(&own_king_board);   
+    if (own_king_board == 0) return false;
+    int king_square = __builtin_ctzll(own_king_board);   
 
     return is_attacked(king_square, is_white);
 }
@@ -741,7 +758,7 @@ void Board::unmake_move() {
 
     int own_offset = colour * Board::PIECES;
 
-    if (last_move.piece_moved == Board::KING && abs(last_move.to - last_move.from) == DOUBLE) {
+    if (last_move.piece_moved % Board::PIECES == Board::KING && abs(last_move.to - last_move.from) == DOUBLE) {
         int castled_rook = (last_move.to + last_move.from) / 2;
         uint64_t castled_rook_mask = 1ULL << castled_rook;
 
@@ -766,22 +783,38 @@ void Board::unmake_move() {
     enpassant = last_move.enpassant;
 }
 
-int get_turns_since_capture() {
+int Board::get_turns_since_capture() {
     return turns_since_capture;
 }
 
-// bool Board::is_checkmate(bool is_white) {
-//     if (!in_check()) {
-//         return false;
-//     }
+bool Board::is_checkmate(bool is_white) {
+    MoveGenerator generator;
 
-//     for ()
-// }
-// bool Board::is_stalemate(bool is_white) {
-//     if (!in_check()) {
-//         return false;
-//     }
+    if (!in_check(is_white)) {
+        return false;
+    }
 
-//     for ()
-// }
+    vector<Move> all_moves = generator.generate_moves(*this, is_white);
+
+    for (Move m : all_moves) {
+        if (is_legal_move(m, is_white)) return false;
+    }
+
+    return true;
+}
+bool Board::is_stalemate(bool is_white) {
+    MoveGenerator generator;
+
+    if (in_check(is_white)) {
+        return false;
+    }
+
+    vector<Move> all_moves = generator.generate_moves(*this, is_white);
+    
+    for (Move m : all_moves) {
+        if (is_legal_move(m, is_white)) return false;
+    }
+
+    return true;
+}
 

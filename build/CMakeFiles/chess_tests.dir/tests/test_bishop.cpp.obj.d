@@ -260,4 +260,7 @@ CMakeFiles/chess_tests.dir/tests/test_bishop.cpp.obj: \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stl_stack.h \
  C:/Users/jeffc/Chess-Engine/include/board.h \
  C:/msys64/mingw64/include/c++/15.2.0/iostream \
- C:/Users/jeffc/Chess-Engine/include/move.h
+ C:/Users/jeffc/Chess-Engine/include/move.h \
+ C:/Users/jeffc/Chess-Engine/include/past_move.h \
+ C:/Users/jeffc/Chess-Engine/include/move_generator.h \
+ C:/Users/jeffc/Chess-Engine/include/board.h

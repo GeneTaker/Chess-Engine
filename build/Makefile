@@ -202,6 +202,33 @@ src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_engine.dir\build.make CMakeFiles/chess_engine.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+src/move_generator.obj: src/move_generator.cpp.obj
+.PHONY : src/move_generator.obj
+
+# target to build an object file
+src/move_generator.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_engine.dir\build.make CMakeFiles/chess_engine.dir/src/move_generator.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/src/move_generator.cpp.obj
+.PHONY : src/move_generator.cpp.obj
+
+src/move_generator.i: src/move_generator.cpp.i
+.PHONY : src/move_generator.i
+
+# target to preprocess a source file
+src/move_generator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_engine.dir\build.make CMakeFiles/chess_engine.dir/src/move_generator.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/src/move_generator.cpp.i
+.PHONY : src/move_generator.cpp.i
+
+src/move_generator.s: src/move_generator.cpp.s
+.PHONY : src/move_generator.s
+
+# target to generate assembly for a file
+src/move_generator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_engine.dir\build.make CMakeFiles/chess_engine.dir/src/move_generator.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/src/move_generator.cpp.s
+.PHONY : src/move_generator.cpp.s
+
 tests/catch_amalgamated.obj: tests/catch_amalgamated.cpp.obj
 .PHONY : tests/catch_amalgamated.obj
 
@@ -273,6 +300,30 @@ tests/test_board.s: tests/test_board.cpp.s
 tests/test_board.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_board.cpp.s
 .PHONY : tests/test_board.cpp.s
+
+tests/test_king.obj: tests/test_king.cpp.obj
+.PHONY : tests/test_king.obj
+
+# target to build an object file
+tests/test_king.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_king.cpp.obj
+.PHONY : tests/test_king.cpp.obj
+
+tests/test_king.i: tests/test_king.cpp.i
+.PHONY : tests/test_king.i
+
+# target to preprocess a source file
+tests/test_king.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_king.cpp.i
+.PHONY : tests/test_king.cpp.i
+
+tests/test_king.s: tests/test_king.cpp.s
+.PHONY : tests/test_king.s
+
+# target to generate assembly for a file
+tests/test_king.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_king.cpp.s
+.PHONY : tests/test_king.cpp.s
 
 tests/test_knight.obj: tests/test_knight.cpp.obj
 .PHONY : tests/test_knight.obj
@@ -411,6 +462,9 @@ help:
 	@echo ... src/main.obj
 	@echo ... src/main.i
 	@echo ... src/main.s
+	@echo ... src/move_generator.obj
+	@echo ... src/move_generator.i
+	@echo ... src/move_generator.s
 	@echo ... tests/catch_amalgamated.obj
 	@echo ... tests/catch_amalgamated.i
 	@echo ... tests/catch_amalgamated.s
@@ -420,6 +474,9 @@ help:
 	@echo ... tests/test_board.obj
 	@echo ... tests/test_board.i
 	@echo ... tests/test_board.s
+	@echo ... tests/test_king.obj
+	@echo ... tests/test_king.i
+	@echo ... tests/test_king.s
 	@echo ... tests/test_knight.obj
 	@echo ... tests/test_knight.i
 	@echo ... tests/test_knight.s

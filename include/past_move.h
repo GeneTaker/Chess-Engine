@@ -18,8 +18,8 @@ struct PastMove {
     int promotion_piece;
     uint16_t enpassant;
     
-    PastMove(Move m, int cp, int cs, uint8_t cr, int tc, int ep):
-        from(m.from), to(m.to), captured_piece(cp), piece_moved(m.type), captured_square(cs),
+    PastMove(Move m, int pmi, int cp, int cs, uint8_t cr, int tc, int ep):
+        from(m.from), to(m.to), captured_piece(cp), piece_moved(pmi), captured_square(cs),
         castle_rights(cr), turn_count(tc), promotion_piece(m.promotion), enpassant(ep) {}
 };
 

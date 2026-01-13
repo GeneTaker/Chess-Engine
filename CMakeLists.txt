@@ -5,7 +5,7 @@ project(chess_engine LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(chess_engine src/main.cpp src/board.cpp)
+add_executable(chess_engine src/main.cpp src/board.cpp src/move_generator.cpp)
 
 # ==========================
 # Tests (Catch2)
@@ -19,8 +19,10 @@ add_executable(chess_tests
     tests/test_rook.cpp
     tests/test_bishop.cpp
     tests/test_queen.cpp
+    tests/test_king.cpp
     tests/catch_amalgamated.cpp  # Add this!
     src/board.cpp
+    src/move_generator.cpp
 )
 
 # Add include directories

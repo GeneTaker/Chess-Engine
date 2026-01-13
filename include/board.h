@@ -7,6 +7,7 @@
 #include "move.h"
 #include <vector>
 #include "past_move.h"
+#include "move_generator.h"
 
 using namespace std;
 
@@ -20,8 +21,7 @@ private:
 
     static constexpr int TILES = 64;
 
-    static constexpr uint64_t FILE_A = 0x0101010101010101ULL;
-    static constexpr uint64_t FILE_H = 0x8080808080808080ULL;
+    
 
     uint64_t knight_attacks[TILES] = {};
     uint64_t king_attacks[TILES] = {};
@@ -95,20 +95,18 @@ private:
         6, 5, 5, 5, 5, 5, 5, 6
     };
 
-    uint64_t pawn_attacks[SIDES][TILES];
+    static constexpr int SIDES = 2;
     
     static constexpr int CASTLE_WS = (1ULL << 0);
     static constexpr int CASTLE_WL = (1ULL << 1);
     static constexpr int CASTLE_BS = (1ULL << 2);
     static constexpr int CASTLE_BL = (1ULL << 3);
-    uint8_t castle_rights = 0;
+    uint8_t castle_rights = 0xF;
 
     int turns_since_capture = 0;
 
     vector<PastMove> move_history;
     
-    bool is_legal_move(Move move, bool is_white);
-    bool legal_pawn_move(Move move, bool is_white);
     bool legal_rook_move(Move move, bool is_white);
     bool legal_knight_move(Move move, bool is_white);
     bool legal_queen_move(Move move, bool is_white);
@@ -124,12 +122,12 @@ private:
     void init_bishop_moves(); 
     void init_king_moves(); 
     void init_pawn_attacks();
-    void pawn_helper(vector<int> offsets, int colour, int index)
+    void pawn_helper(vector<int> offsets, int colour, int index);
     
     int num_bits(uint64_t mask);
 
     uint64_t set_occupancy(uint64_t mask, int bits, int index);
-
+    
     uint64_t find_rook_attacks(int sq, uint64_t blockers);
     uint64_t find_bishop_attacks(int sq, uint64_t blockers);
 
@@ -137,13 +135,17 @@ private:
 
     uint64_t find_rook_mask(int index);
     uint64_t find_bishop_mask(int index);
-
-    bool is_attacked(int square, bool is_white);
+    
+    static constexpr uint64_t FILE_A = 0x0101010101010101ULL;
+    static constexpr uint64_t FILE_H = 0x8080808080808080ULL;
+    uint64_t pawn_attacks[SIDES][TILES] = {};
 
     bool check_evade(Move move, bool is_white);
-
-
+    bool legal_pawn_move(Move move, bool is_white);
+    bool is_legal_move(Move move, bool is_white);
+    
 public:
+    bool is_attacked(int square, bool is_white);
     
     static constexpr int PAWN = 0;
     static constexpr int ROOK = 1;
@@ -155,7 +157,7 @@ public:
     static constexpr int PIECES = 6;
     static constexpr int SIDE = 8;
 
-
+    
 
     static constexpr int BLACK_PAWN = PAWN + BLACK_SHIFT;
     static constexpr int BLACK_ROOK = ROOK + BLACK_SHIFT;
