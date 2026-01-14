@@ -21,8 +21,6 @@ private:
 
     static constexpr int TILES = 64;
 
-    
-
     uint64_t knight_attacks[TILES] = {};
     uint64_t king_attacks[TILES] = {};
 
@@ -143,7 +141,9 @@ private:
     bool check_evade(Move move, bool is_white);
     bool legal_pawn_move(Move move, bool is_white);
     bool is_legal_move(Move move, bool is_white);
-    
+  
+    bool bitboards_equal(Board board);
+
 public:
     bool is_attacked(int square, bool is_white);
     
@@ -198,9 +198,21 @@ public:
     // gets the number of turns since the last made capture
     int get_turns_since_capture();
 
+    // returns whether or not it is currently checkmate
     bool is_checkmate(bool is_white);
 
+    // returns whether or not it is currently stalemate
     bool is_stalemate(bool is_white);
+
+    // returns all legal moves
+    vector<Move> find_legal_moves(bool is_white);
+
+    // checks whether it is a draw, through repeated moves
+    bool is_three_fold();
+
+    bool is_over(bool is_white);
+
+    bool insufficient_material();
 };
 
 #endif

@@ -8,6 +8,7 @@
 #define NONE -1
 #define ENPASSANT_WHITE 5
 #define ENPASSANT_BLACK 2
+#define MAX_TURN_RULE 99
 
 uint64_t Board::rook_attacks[TILES][4096];
 uint64_t Board::bishop_attacks[TILES][512];
@@ -435,12 +436,6 @@ void Board::make_move_unchecked(Move move, bool is_white) {
         bitboards[move.type + own_offset] ^= to_mask;
         bitboards[move.promotion + own_offset] |= to_mask;
     }
-    
-    if (captured_piece != NONE || move.type == Board::PAWN) {
-        turns_since_capture = 0;
-    } else {
-        turns_since_capture++;
-    }
 
     // removes a castling right if a corner rook is captured 
     if (captured_piece % Board::PIECES == Board::ROOK) {
@@ -450,7 +445,7 @@ void Board::make_move_unchecked(Move move, bool is_white) {
         if (captured_square == 63) castle_rights &= ~CASTLE_BS;
     }
 
-    PastMove current_move(move, own_offset + move.type, captured_piece, captured_square, old_castle_rights, turns_since_capture, old_passant);
+    PastMove current_move(move, own_offset + move.type, captured_piece, captured_square, old_castle_rights, old_passant);
     move_history.push_back(current_move);
 }
 
@@ -754,8 +749,6 @@ void Board::unmake_move() {
         *opp_board |= 1ULL << last_move.captured_square;
     }
 
-    turns_since_capture = last_move.turn_count;
-
     int own_offset = colour * Board::PIECES;
 
     if (last_move.piece_moved % Board::PIECES == Board::KING && abs(last_move.to - last_move.from) == DOUBLE) {
@@ -781,10 +774,6 @@ void Board::unmake_move() {
 
     castle_rights = last_move.castle_rights;
     enpassant = last_move.enpassant;
-}
-
-int Board::get_turns_since_capture() {
-    return turns_since_capture;
 }
 
 bool Board::is_checkmate(bool is_white) {
@@ -818,3 +807,89 @@ bool Board::is_stalemate(bool is_white) {
     return true;
 }
 
+vector<Move> Board::find_legal_moves(bool is_white) {
+    MoveGenerator generator;
+    vector<Move> all_moves = generator.generate_moves(*this, is_white);
+    vector<Move> filter_moves;
+
+    for (Move m : all_moves) {
+        if (is_legal_move(m, is_white)) filter_moves.push_back(m);
+    }
+
+    return filter_moves;
+}
+
+bool Board::is_three_fold() {
+    int count = 0;
+
+    int n = move_history.size();
+    Board temp = *this;
+    for (int i = 0; i < n; i++) {
+        temp.unmake_move();
+        if (bitboards_equal(temp) && temp.enpassant == enpassant && temp.castle_rights == castle_rights) {
+            if (++count >= 2) return true;
+        }
+    }
+    return false;
+}
+
+bool Board::bitboards_equal(Board board) {
+    for (int i = 0; i < Board::UNIQUE_PIECES; i++) {
+        if (board.bitboards[i] != bitboards[i]) return false;
+    }
+    return true;
+}
+
+bool Board::insufficient_material() {
+    uint64_t all_pieces = white_bitboard | black_bitboard;
+
+    uint64_t white_pawns   = bitboards[PAWN];
+    uint64_t white_rooks   = bitboards[ROOK];
+    uint64_t white_queens  = bitboards[QUEEN];
+    uint64_t white_knights = bitboards[KNIGHT];
+    uint64_t white_bishops = bitboards[BISHOP];
+
+    uint64_t black_pawns   = bitboards[BLACK_PAWN];
+    uint64_t black_rooks   = bitboards[BLACK_ROOK];
+    uint64_t black_queens  = bitboards[BLACK_QUEEN];
+    uint64_t black_knights = bitboards[BLACK_KNIGHT];
+    uint64_t black_bishops = bitboards[BLACK_BISHOP];
+
+    if (white_pawns || black_pawns || white_rooks || black_rooks || white_queens || black_queens)
+        return false;
+
+    int white_knight_count = __builtin_popcountll(white_knights);
+    int white_bishop_count = __builtin_popcountll(white_bishops);
+    int black_knight_count = __builtin_popcountll(black_knights);
+    int black_bishop_count = __builtin_popcountll(black_bishops);
+
+    int total_minors = white_knight_count + white_bishop_count + black_knight_count + black_bishop_count;
+
+    if (total_minors == 0) return true;
+
+    if (total_minors == 1) return true;
+
+    if (total_minors == 2 &&
+        white_bishop_count == 1 && black_bishop_count == 1 &&
+        white_knight_count == 0 && black_knight_count == 0) {
+
+        int w_square = __builtin_ctzll(white_bishops);
+        int b_square = __builtin_ctzll(black_bishops);
+
+        bool w_color = (w_square / 8 + w_square % 8) % 2;
+        bool b_color = (b_square / 8 + b_square % 8) % 2;
+
+        if (w_color == b_color) return true;
+    }
+
+    if (total_minors == 2 &&
+        white_knight_count == 1 && black_knight_count == 1 &&
+        white_bishop_count == 0 && black_bishop_count == 0)
+        return true;
+
+    return false;
+}
+
+bool Board::is_over(bool is_white) {
+    return insufficient_material() || is_three_fold() || is_stalemate(is_white) || is_checkmate(is_white);
+}

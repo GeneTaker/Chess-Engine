@@ -113,27 +113,14 @@ TEST_CASE("King test, test castling both ways") {
     board.move(e4, true);
     board.move(d4, true);
     board.move(qf3, true);
-    // std::cout << board.in_check(true) << endl;
-    // std::cout << board.is_attacked(3, true) << "<- 3 is attacked" << endl;
-    // std::cout << board.is_attacked(2, true) << "<- 2 is attacked" << endl;
-    // std::cout << board.get_occupancy(true) << endl;
-    std::cout << "-------------------" << endl;
     board.move(be3, true);
-    // std::cout << board.in_check(true) << endl;
-    // std::cout << board.is_attacked(3, true) << "<- 3 is attacked" << endl;
-    // std::cout << board.is_attacked(2, true) << "<- 2 is attacked" << endl;
-    // std::cout << board.get_occupancy(true) << endl;
-    // std::cout << "-------------------" << endl;
+
     board.move(nc3, true);
 
     //castle long
 
     Move o_o_o(4, 2, Board::KING);
     bool b = board.move(o_o_o, true);
-    // std::cout << board.in_check(true) << endl;
-    // std::cout << board.is_attacked(3, true) << "<- 3 is attacked" << endl;
-    // std::cout << board.is_attacked(2, true) << "<- 2 is attacked" << endl;
-    // std::cout << board.get_occupancy(true) << endl;
     
     REQUIRE(b);
     

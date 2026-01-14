@@ -59,3 +59,28 @@ TEST_CASE("Board test, ensure board is initialised properly") {
     REQUIRE(white & (1ULL << 5));
     REQUIRE(black & (1ULL << 61));
 }
+
+TEST_CASE("50 turn rule") {
+    Board board;
+
+    Move m1(1, 18, Board::KNIGHT);
+    Move m2(18, 1, Board::KNIGHT);
+
+    Move m3(62, 45, Board::KNIGHT);
+    Move m4(45, 62, Board::KNIGHT);
+
+    board.move(m1, true);
+    
+    board.move(m3, false);
+    board.move(m2, true);
+    board.move(m4, false);
+    REQUIRE_FALSE(board.is_three_fold());
+
+    board.move(m1, true);
+    board.move(m3, false);
+    board.move(m2, true);
+    board.move(m4, false);
+    REQUIRE(board.is_three_fold());
+
+}
+
