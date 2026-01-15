@@ -191,11 +191,26 @@ CMakeFiles/chess_tests.dir/tests/test_king.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/chess_tests.dir/tests/test_king.cpp.s"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\jeffc\Chess-Engine\tests\test_king.cpp -o CMakeFiles\chess_tests.dir\tests\test_king.cpp.s
 
+CMakeFiles/chess_tests.dir/tests/test_evaluator.cpp.obj: CMakeFiles/chess_tests.dir/flags.make
+CMakeFiles/chess_tests.dir/tests/test_evaluator.cpp.obj: CMakeFiles/chess_tests.dir/includes_CXX.rsp
+CMakeFiles/chess_tests.dir/tests/test_evaluator.cpp.obj: C:/Users/jeffc/Chess-Engine/tests/test_evaluator.cpp
+CMakeFiles/chess_tests.dir/tests/test_evaluator.cpp.obj: CMakeFiles/chess_tests.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\jeffc\Chess-Engine\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/chess_tests.dir/tests/test_evaluator.cpp.obj"
+	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/chess_tests.dir/tests/test_evaluator.cpp.obj -MF CMakeFiles\chess_tests.dir\tests\test_evaluator.cpp.obj.d -o CMakeFiles\chess_tests.dir\tests\test_evaluator.cpp.obj -c C:\Users\jeffc\Chess-Engine\tests\test_evaluator.cpp
+
+CMakeFiles/chess_tests.dir/tests/test_evaluator.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/chess_tests.dir/tests/test_evaluator.cpp.i"
+	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\jeffc\Chess-Engine\tests\test_evaluator.cpp > CMakeFiles\chess_tests.dir\tests\test_evaluator.cpp.i
+
+CMakeFiles/chess_tests.dir/tests/test_evaluator.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/chess_tests.dir/tests/test_evaluator.cpp.s"
+	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\jeffc\Chess-Engine\tests\test_evaluator.cpp -o CMakeFiles\chess_tests.dir\tests\test_evaluator.cpp.s
+
 CMakeFiles/chess_tests.dir/tests/catch_amalgamated.cpp.obj: CMakeFiles/chess_tests.dir/flags.make
 CMakeFiles/chess_tests.dir/tests/catch_amalgamated.cpp.obj: CMakeFiles/chess_tests.dir/includes_CXX.rsp
 CMakeFiles/chess_tests.dir/tests/catch_amalgamated.cpp.obj: C:/Users/jeffc/Chess-Engine/tests/catch_amalgamated.cpp
 CMakeFiles/chess_tests.dir/tests/catch_amalgamated.cpp.obj: CMakeFiles/chess_tests.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\jeffc\Chess-Engine\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/chess_tests.dir/tests/catch_amalgamated.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\jeffc\Chess-Engine\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/chess_tests.dir/tests/catch_amalgamated.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/chess_tests.dir/tests/catch_amalgamated.cpp.obj -MF CMakeFiles\chess_tests.dir\tests\catch_amalgamated.cpp.obj.d -o CMakeFiles\chess_tests.dir\tests\catch_amalgamated.cpp.obj -c C:\Users\jeffc\Chess-Engine\tests\catch_amalgamated.cpp
 
 CMakeFiles/chess_tests.dir/tests/catch_amalgamated.cpp.i: cmake_force
@@ -210,7 +225,7 @@ CMakeFiles/chess_tests.dir/src/board.cpp.obj: CMakeFiles/chess_tests.dir/flags.m
 CMakeFiles/chess_tests.dir/src/board.cpp.obj: CMakeFiles/chess_tests.dir/includes_CXX.rsp
 CMakeFiles/chess_tests.dir/src/board.cpp.obj: C:/Users/jeffc/Chess-Engine/src/board.cpp
 CMakeFiles/chess_tests.dir/src/board.cpp.obj: CMakeFiles/chess_tests.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\jeffc\Chess-Engine\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/chess_tests.dir/src/board.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\jeffc\Chess-Engine\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/chess_tests.dir/src/board.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/chess_tests.dir/src/board.cpp.obj -MF CMakeFiles\chess_tests.dir\src\board.cpp.obj.d -o CMakeFiles\chess_tests.dir\src\board.cpp.obj -c C:\Users\jeffc\Chess-Engine\src\board.cpp
 
 CMakeFiles/chess_tests.dir/src/board.cpp.i: cmake_force
@@ -225,7 +240,7 @@ CMakeFiles/chess_tests.dir/src/move_generator.cpp.obj: CMakeFiles/chess_tests.di
 CMakeFiles/chess_tests.dir/src/move_generator.cpp.obj: CMakeFiles/chess_tests.dir/includes_CXX.rsp
 CMakeFiles/chess_tests.dir/src/move_generator.cpp.obj: C:/Users/jeffc/Chess-Engine/src/move_generator.cpp
 CMakeFiles/chess_tests.dir/src/move_generator.cpp.obj: CMakeFiles/chess_tests.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\jeffc\Chess-Engine\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/chess_tests.dir/src/move_generator.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\jeffc\Chess-Engine\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/chess_tests.dir/src/move_generator.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/chess_tests.dir/src/move_generator.cpp.obj -MF CMakeFiles\chess_tests.dir\src\move_generator.cpp.obj.d -o CMakeFiles\chess_tests.dir\src\move_generator.cpp.obj -c C:\Users\jeffc\Chess-Engine\src\move_generator.cpp
 
 CMakeFiles/chess_tests.dir/src/move_generator.cpp.i: cmake_force
@@ -235,6 +250,21 @@ CMakeFiles/chess_tests.dir/src/move_generator.cpp.i: cmake_force
 CMakeFiles/chess_tests.dir/src/move_generator.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/chess_tests.dir/src/move_generator.cpp.s"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\jeffc\Chess-Engine\src\move_generator.cpp -o CMakeFiles\chess_tests.dir\src\move_generator.cpp.s
+
+CMakeFiles/chess_tests.dir/src/evaluator.cpp.obj: CMakeFiles/chess_tests.dir/flags.make
+CMakeFiles/chess_tests.dir/src/evaluator.cpp.obj: CMakeFiles/chess_tests.dir/includes_CXX.rsp
+CMakeFiles/chess_tests.dir/src/evaluator.cpp.obj: C:/Users/jeffc/Chess-Engine/src/evaluator.cpp
+CMakeFiles/chess_tests.dir/src/evaluator.cpp.obj: CMakeFiles/chess_tests.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\jeffc\Chess-Engine\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/chess_tests.dir/src/evaluator.cpp.obj"
+	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/chess_tests.dir/src/evaluator.cpp.obj -MF CMakeFiles\chess_tests.dir\src\evaluator.cpp.obj.d -o CMakeFiles\chess_tests.dir\src\evaluator.cpp.obj -c C:\Users\jeffc\Chess-Engine\src\evaluator.cpp
+
+CMakeFiles/chess_tests.dir/src/evaluator.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/chess_tests.dir/src/evaluator.cpp.i"
+	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\jeffc\Chess-Engine\src\evaluator.cpp > CMakeFiles\chess_tests.dir\src\evaluator.cpp.i
+
+CMakeFiles/chess_tests.dir/src/evaluator.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/chess_tests.dir/src/evaluator.cpp.s"
+	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\jeffc\Chess-Engine\src\evaluator.cpp -o CMakeFiles\chess_tests.dir\src\evaluator.cpp.s
 
 # Object files for target chess_tests
 chess_tests_OBJECTS = \
@@ -246,9 +276,11 @@ chess_tests_OBJECTS = \
 "CMakeFiles/chess_tests.dir/tests/test_bishop.cpp.obj" \
 "CMakeFiles/chess_tests.dir/tests/test_queen.cpp.obj" \
 "CMakeFiles/chess_tests.dir/tests/test_king.cpp.obj" \
+"CMakeFiles/chess_tests.dir/tests/test_evaluator.cpp.obj" \
 "CMakeFiles/chess_tests.dir/tests/catch_amalgamated.cpp.obj" \
 "CMakeFiles/chess_tests.dir/src/board.cpp.obj" \
-"CMakeFiles/chess_tests.dir/src/move_generator.cpp.obj"
+"CMakeFiles/chess_tests.dir/src/move_generator.cpp.obj" \
+"CMakeFiles/chess_tests.dir/src/evaluator.cpp.obj"
 
 # External object files for target chess_tests
 chess_tests_EXTERNAL_OBJECTS =
@@ -261,14 +293,16 @@ chess_tests.exe: CMakeFiles/chess_tests.dir/tests/test_rook.cpp.obj
 chess_tests.exe: CMakeFiles/chess_tests.dir/tests/test_bishop.cpp.obj
 chess_tests.exe: CMakeFiles/chess_tests.dir/tests/test_queen.cpp.obj
 chess_tests.exe: CMakeFiles/chess_tests.dir/tests/test_king.cpp.obj
+chess_tests.exe: CMakeFiles/chess_tests.dir/tests/test_evaluator.cpp.obj
 chess_tests.exe: CMakeFiles/chess_tests.dir/tests/catch_amalgamated.cpp.obj
 chess_tests.exe: CMakeFiles/chess_tests.dir/src/board.cpp.obj
 chess_tests.exe: CMakeFiles/chess_tests.dir/src/move_generator.cpp.obj
+chess_tests.exe: CMakeFiles/chess_tests.dir/src/evaluator.cpp.obj
 chess_tests.exe: CMakeFiles/chess_tests.dir/build.make
 chess_tests.exe: CMakeFiles/chess_tests.dir/linkLibs.rsp
 chess_tests.exe: CMakeFiles/chess_tests.dir/objects1.rsp
 chess_tests.exe: CMakeFiles/chess_tests.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\jeffc\Chess-Engine\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Linking CXX executable chess_tests.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\jeffc\Chess-Engine\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Linking CXX executable chess_tests.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\chess_tests.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

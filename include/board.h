@@ -129,8 +129,7 @@ private:
     uint64_t find_rook_attacks(int sq, uint64_t blockers);
     uint64_t find_bishop_attacks(int sq, uint64_t blockers);
 
-    int pop_bit(uint64_t *mask);
-
+    
     uint64_t find_rook_mask(int index);
     uint64_t find_bishop_mask(int index);
     
@@ -168,15 +167,14 @@ public:
 
     // initialises the initial state of the board
     Board();
-
+    
 
     // updates the board with a move
     bool move(Move move, bool is_white);
 
     // makes a move regardless of legality
     void make_move_unchecked(Move move, bool is_white);
-
-
+    
     // prints all bitboards for debugging purposes
     void print_bitboards();
 
@@ -185,7 +183,7 @@ public:
 
     // gets the occupancy table for a side
     uint64_t get_occupancy(bool is_white);
-
+    
     // returns the index of a coloured piecetype within the bitboard array
     constexpr int bb_index(int type, bool is_white);
 
@@ -200,19 +198,31 @@ public:
 
     // returns whether or not it is currently checkmate
     bool is_checkmate(bool is_white);
-
+    
     // returns whether or not it is currently stalemate
     bool is_stalemate(bool is_white);
-
+    
     // returns all legal moves
     vector<Move> find_legal_moves(bool is_white);
 
     // checks whether it is a draw, through repeated moves
     bool is_three_fold();
-
+    
     bool is_over(bool is_white);
-
+    
     bool insufficient_material();
+    
+    uint64_t get_rook_attacks(int square);
+    
+    uint64_t get_bishop_attacks(int square);
+    
+    uint64_t get_queen_attacks(int square);
+    
+    uint64_t king_adjacent(bool is_white);
+    
+    int king_position(bool is_white);
+
+    static int pop_bit(uint64_t *mask);
 };
 
 #endif

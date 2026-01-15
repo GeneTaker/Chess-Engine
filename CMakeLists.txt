@@ -20,9 +20,11 @@ add_executable(chess_tests
     tests/test_bishop.cpp
     tests/test_queen.cpp
     tests/test_king.cpp
-    tests/catch_amalgamated.cpp  # Add this!
+    tests/test_evaluator.cpp
+    tests/catch_amalgamated.cpp
     src/board.cpp
     src/move_generator.cpp
+    src/evaluator.cpp
 )
 
 # Add include directories

@@ -10,20 +10,24 @@
 #define SOUTH -8
 #define WEST -1
 
-int MoveGenerator::pop_bit(uint64_t *mask) {
-    int index = __builtin_ctzll(*mask);
-    *mask &= (*mask - 1);     
-    return index;
-}
-
 void MoveGenerator::generate_pawn_moves(int from, bool is_white, std::vector<Move>& moves) {
     int direction = (is_white) ? UP : DOWN;
     
     std::vector<int> offsets = {7, 8, 9, 16};
 
     for (int o : offsets) {
-        Move m(from, from + o * direction, Board::PAWN);
-        moves.push_back(m);
+        int to = from + o * direction;
+        if (to / Board::SIDE == 0 || to / Board::SIDE == (Board::SIDE - 1)) {
+            vector<int> promotables = {Board::KNIGHT, Board::ROOK, Board::QUEEN, Board::BISHOP};
+
+            for (int p : promotables) {
+                Move m(from, to, Board::PAWN, p);
+                moves.push_back(m);
+            }
+        } else {
+            Move m(from, to, Board::PAWN);
+            moves.push_back(m);
+        }
     }
 }
 void MoveGenerator::generate_knight_moves(int from, bool is_white, std::vector<Move>& moves) {
@@ -124,7 +128,7 @@ std::vector<Move> MoveGenerator::generate_moves(Board& board, bool is_white) {
         uint64_t temp = bitboard;
 
         while (temp != 0) {
-            int from = pop_bit(&temp);
+            int from = Board::pop_bit(&temp);
             uint64_t from_mask = 1ULL << from;
 
             switch (i) {

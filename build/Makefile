@@ -178,6 +178,30 @@ src/board.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/src/board.cpp.s
 .PHONY : src/board.cpp.s
 
+src/evaluator.obj: src/evaluator.cpp.obj
+.PHONY : src/evaluator.obj
+
+# target to build an object file
+src/evaluator.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/src/evaluator.cpp.obj
+.PHONY : src/evaluator.cpp.obj
+
+src/evaluator.i: src/evaluator.cpp.i
+.PHONY : src/evaluator.i
+
+# target to preprocess a source file
+src/evaluator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/src/evaluator.cpp.i
+.PHONY : src/evaluator.cpp.i
+
+src/evaluator.s: src/evaluator.cpp.s
+.PHONY : src/evaluator.s
+
+# target to generate assembly for a file
+src/evaluator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/src/evaluator.cpp.s
+.PHONY : src/evaluator.cpp.s
+
 src/main.obj: src/main.cpp.obj
 .PHONY : src/main.obj
 
@@ -300,6 +324,30 @@ tests/test_board.s: tests/test_board.cpp.s
 tests/test_board.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_board.cpp.s
 .PHONY : tests/test_board.cpp.s
+
+tests/test_evaluator.obj: tests/test_evaluator.cpp.obj
+.PHONY : tests/test_evaluator.obj
+
+# target to build an object file
+tests/test_evaluator.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_evaluator.cpp.obj
+.PHONY : tests/test_evaluator.cpp.obj
+
+tests/test_evaluator.i: tests/test_evaluator.cpp.i
+.PHONY : tests/test_evaluator.i
+
+# target to preprocess a source file
+tests/test_evaluator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_evaluator.cpp.i
+.PHONY : tests/test_evaluator.cpp.i
+
+tests/test_evaluator.s: tests/test_evaluator.cpp.s
+.PHONY : tests/test_evaluator.s
+
+# target to generate assembly for a file
+tests/test_evaluator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_evaluator.cpp.s
+.PHONY : tests/test_evaluator.cpp.s
 
 tests/test_king.obj: tests/test_king.cpp.obj
 .PHONY : tests/test_king.obj
@@ -459,6 +507,9 @@ help:
 	@echo ... src/board.obj
 	@echo ... src/board.i
 	@echo ... src/board.s
+	@echo ... src/evaluator.obj
+	@echo ... src/evaluator.i
+	@echo ... src/evaluator.s
 	@echo ... src/main.obj
 	@echo ... src/main.i
 	@echo ... src/main.s
@@ -474,6 +525,9 @@ help:
 	@echo ... tests/test_board.obj
 	@echo ... tests/test_board.i
 	@echo ... tests/test_board.s
+	@echo ... tests/test_evaluator.obj
+	@echo ... tests/test_evaluator.i
+	@echo ... tests/test_evaluator.s
 	@echo ... tests/test_king.obj
 	@echo ... tests/test_king.i
 	@echo ... tests/test_king.s

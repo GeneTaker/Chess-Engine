@@ -9,10 +9,12 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "C:/Users/jeffc/Chess-Engine/src/board.cpp" "CMakeFiles/chess_tests.dir/src/board.cpp.obj" "gcc" "CMakeFiles/chess_tests.dir/src/board.cpp.obj.d"
+  "C:/Users/jeffc/Chess-Engine/src/evaluator.cpp" "CMakeFiles/chess_tests.dir/src/evaluator.cpp.obj" "gcc" "CMakeFiles/chess_tests.dir/src/evaluator.cpp.obj.d"
   "C:/Users/jeffc/Chess-Engine/src/move_generator.cpp" "CMakeFiles/chess_tests.dir/src/move_generator.cpp.obj" "gcc" "CMakeFiles/chess_tests.dir/src/move_generator.cpp.obj.d"
   "C:/Users/jeffc/Chess-Engine/tests/catch_amalgamated.cpp" "CMakeFiles/chess_tests.dir/tests/catch_amalgamated.cpp.obj" "gcc" "CMakeFiles/chess_tests.dir/tests/catch_amalgamated.cpp.obj.d"
   "C:/Users/jeffc/Chess-Engine/tests/test_bishop.cpp" "CMakeFiles/chess_tests.dir/tests/test_bishop.cpp.obj" "gcc" "CMakeFiles/chess_tests.dir/tests/test_bishop.cpp.obj.d"
   "C:/Users/jeffc/Chess-Engine/tests/test_board.cpp" "CMakeFiles/chess_tests.dir/tests/test_board.cpp.obj" "gcc" "CMakeFiles/chess_tests.dir/tests/test_board.cpp.obj.d"
+  "C:/Users/jeffc/Chess-Engine/tests/test_evaluator.cpp" "CMakeFiles/chess_tests.dir/tests/test_evaluator.cpp.obj" "gcc" "CMakeFiles/chess_tests.dir/tests/test_evaluator.cpp.obj.d"
   "C:/Users/jeffc/Chess-Engine/tests/test_king.cpp" "CMakeFiles/chess_tests.dir/tests/test_king.cpp.obj" "gcc" "CMakeFiles/chess_tests.dir/tests/test_king.cpp.obj.d"
   "C:/Users/jeffc/Chess-Engine/tests/test_knight.cpp" "CMakeFiles/chess_tests.dir/tests/test_knight.cpp.obj" "gcc" "CMakeFiles/chess_tests.dir/tests/test_knight.cpp.obj.d"
   "C:/Users/jeffc/Chess-Engine/tests/test_main.cpp" "CMakeFiles/chess_tests.dir/tests/test_main.cpp.obj" "gcc" "CMakeFiles/chess_tests.dir/tests/test_main.cpp.obj.d"

@@ -169,9 +169,9 @@ uint64_t Board::find_rook_attacks(int sq, uint64_t blockers) {
     return result;
 }
 
-int Board::pop_bit(uint64_t *mask) {
+int Board::pop_bit(uint64_t *mask) {    
     int index = __builtin_ctzll(*mask);
-    *mask &= (*mask - 1);     
+    *mask &= (*mask - 1);
     return index;
 }
 
@@ -528,14 +528,12 @@ bool Board::is_attacked(int square, bool is_white) {
 
     uint64_t occupied = white_bitboard | black_bitboard;
     // Bishops/queens
-    uint64_t bishop_blockers = occupied & bishop_masks[square];
-    int bishop_index = (bishop_blockers * bishop_magic[square]) >> (Board::TILES - bishop_shift[square]);
-    if (bishop_attacks[square][bishop_index] & (opp_bishops | opp_queens)) return true;
+    uint64_t attack_bishops = get_bishop_attacks(square);
+    if (attack_bishops & (opp_bishops | opp_queens)) return true;
     
     // Rooks/queens
-    uint64_t rook_blockers = occupied & rook_masks[square];
-    int rook_index = (rook_blockers * rook_magic[square]) >> (Board::TILES - rook_shift[square]);
-    if (rook_attacks[square][rook_index] & (opp_rooks | opp_queens)) return true;
+    uint64_t attack_rooks = get_rook_attacks(square);
+    if (attack_rooks & (opp_rooks | opp_queens)) return true;
     
     return false;
 }
@@ -601,15 +599,20 @@ bool Board::legal_pawn_move(Move move, bool is_white) {
 }
 
 bool Board::legal_rook_move(Move move, bool is_white) {
-    uint64_t occupancy = white_bitboard | black_bitboard;
-    
-    uint64_t blockers = occupancy & rook_masks[move.from];
-
-    int index = (blockers * rook_magic[move.from]) >> (Board::TILES - rook_shift[move.from]);
-
-    uint64_t attacks = Board::rook_attacks[move.from][index];
+    uint64_t attacks = get_rook_attacks(move.from);
 
     return !((attacks & (1ULL << move.to)) == 0);
+}
+
+uint64_t Board::get_rook_attacks(int square) {
+    uint64_t occupancy = white_bitboard | black_bitboard;
+    uint64_t blockers = occupancy & rook_masks[square];
+
+    int index = (blockers * rook_magic[square]) >> (Board::TILES - rook_shift[square]);
+
+    uint64_t attacks = Board::rook_attacks[square][index];
+
+    return attacks;
 }
 
 bool Board::legal_knight_move(Move move, bool is_white) {
@@ -623,15 +626,24 @@ bool Board::legal_queen_move(Move move, bool is_white) {
     return legal_rook_move(move, is_white) || legal_bishop_move(move, is_white);
 }
 
+uint64_t Board::get_queen_attacks(int square) {
+    return get_rook_attacks(square) | get_bishop_attacks(square);
+}
+
 bool Board::legal_bishop_move(Move move, bool is_white) {
-    uint64_t occupied = white_bitboard | black_bitboard;
-    
-    uint64_t blockers = occupied & bishop_masks[move.from];
-
-    int index = (blockers * bishop_magic[move.from]) >> (Board::TILES - bishop_shift[move.from]);
-
+    uint64_t attacks = get_bishop_attacks(move.from);
     uint64_t to_mask = (1ULL << move.to);
-    return (bishop_attacks[move.from][index] & to_mask) != 0;
+
+    return (attacks & to_mask) != 0;
+}
+
+uint64_t Board::get_bishop_attacks(int square) {
+    uint64_t occupied = white_bitboard | black_bitboard;
+    uint64_t blockers = occupied & bishop_masks[square];
+
+    int index = (blockers * bishop_magic[square]) >> (Board::TILES - bishop_shift[square]);
+
+    return bishop_attacks[square][index];
 }
 
 bool Board::legal_king_move(Move move, bool is_white) {
@@ -892,4 +904,19 @@ bool Board::insufficient_material() {
 
 bool Board::is_over(bool is_white) {
     return insufficient_material() || is_three_fold() || is_stalemate(is_white) || is_checkmate(is_white);
+}
+
+uint64_t Board::king_adjacent(bool is_white) {
+    int position = king_position(is_white);
+
+    uint64_t result = king_attacks[position];
+    return result;
+}
+
+int Board::king_position(bool is_white) {
+    uint64_t king_board = bitboards[bb_index(Board::KING, is_white)];
+    if (king_board == 0) return 0;
+
+    int position = __builtin_ctzll(king_board);
+    return position;
 }

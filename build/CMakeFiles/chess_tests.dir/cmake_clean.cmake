@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/chess_tests.dir/src/board.cpp.obj"
   "CMakeFiles/chess_tests.dir/src/board.cpp.obj.d"
+  "CMakeFiles/chess_tests.dir/src/evaluator.cpp.obj"
+  "CMakeFiles/chess_tests.dir/src/evaluator.cpp.obj.d"
   "CMakeFiles/chess_tests.dir/src/move_generator.cpp.obj"
   "CMakeFiles/chess_tests.dir/src/move_generator.cpp.obj.d"
   "CMakeFiles/chess_tests.dir/tests/catch_amalgamated.cpp.obj"
@@ -9,6 +11,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/chess_tests.dir/tests/test_bishop.cpp.obj.d"
   "CMakeFiles/chess_tests.dir/tests/test_board.cpp.obj"
   "CMakeFiles/chess_tests.dir/tests/test_board.cpp.obj.d"
+  "CMakeFiles/chess_tests.dir/tests/test_evaluator.cpp.obj"
+  "CMakeFiles/chess_tests.dir/tests/test_evaluator.cpp.obj.d"
   "CMakeFiles/chess_tests.dir/tests/test_king.cpp.obj"
   "CMakeFiles/chess_tests.dir/tests/test_king.cpp.obj.d"
   "CMakeFiles/chess_tests.dir/tests/test_knight.cpp.obj"
