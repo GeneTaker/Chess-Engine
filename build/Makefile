@@ -210,6 +210,7 @@ src/evaluator.obj: src/evaluator.cpp.obj
 
 # target to build an object file
 src/evaluator.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_engine.dir\build.make CMakeFiles/chess_engine.dir/src/evaluator.cpp.obj
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/src/evaluator.cpp.obj
 .PHONY : src/evaluator.cpp.obj
 
@@ -218,6 +219,7 @@ src/evaluator.i: src/evaluator.cpp.i
 
 # target to preprocess a source file
 src/evaluator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_engine.dir\build.make CMakeFiles/chess_engine.dir/src/evaluator.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/src/evaluator.cpp.i
 .PHONY : src/evaluator.cpp.i
 
@@ -226,6 +228,7 @@ src/evaluator.s: src/evaluator.cpp.s
 
 # target to generate assembly for a file
 src/evaluator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_engine.dir\build.make CMakeFiles/chess_engine.dir/src/evaluator.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/src/evaluator.cpp.s
 .PHONY : src/evaluator.cpp.s
 

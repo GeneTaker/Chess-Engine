@@ -9,7 +9,7 @@
 
 class Engine {
 private:
-    static constexpr int MAX_DEPTH = 5;
+    static constexpr int MAX_DEPTH = 4;
     Evaluator evaluator;
 
     int search(Board& board, int depth, bool is_white, int alpha, int beta);

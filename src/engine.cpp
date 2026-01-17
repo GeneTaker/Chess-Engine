@@ -1,13 +1,80 @@
 #include "../include/engine.h"
+#include "../include/evaluator.h"
 #include <vector>
 
 
 int Engine::search(Board& board, int depth, bool is_white, int alpha, int beta) {
-    return -1;
+    if (depth == 0) {
+        return evaluator.evaluate_position(board, is_white);
+    }
+
+    std::vector<Move> all_moves = board.find_legal_moves(is_white);
+
+    if (board.is_checkmate(is_white)) {
+        return INT_MIN;
+    }
+
+    if (all_moves.size() == 0) {
+        return 0;
+    }
+
+    if (is_white) {
+        int best_val = INT_MIN;
+
+        for (auto m : all_moves) {
+            board.make_move_unchecked(m, is_white);
+            int score = search(board, depth - 1, !is_white, -beta, -alpha);
+            board.unmake_move();
+
+            best_val = std::max(best_val, score);
+            alpha = std::max(alpha, best_val);
+
+            // If the other player can guarantee us a worse position
+            if (alpha >= beta) {
+                break;
+            }
+        } 
+        return best_val;
+    } else {
+        int best_val = INT_MAX;
+        
+        for (auto m : all_moves) {
+            board.make_move_unchecked(m, is_white);
+            int score = -1 * search(board, depth - 1, !is_white, alpha, beta);
+            board.unmake_move();
+
+            best_val = std::min(best_val, score);
+            beta = std::min(beta, best_val);
+
+            if (alpha >= beta) {
+                break;
+            }
+
+        }
+        return best_val;
+    }
 }
 
 Move Engine::best_move(Board& board, bool is_white) {
-    return Move(1, 1, Board::PAWN);
+    std::vector<Move> all_moves = board.find_legal_moves(is_white);
+
+    Move best(1, 1, Board::KING);
+    int best_score = (is_white) ? INT_MIN : INT_MAX;
+
+    for (auto move : all_moves) {
+        board.make_move_unchecked(move, is_white);
+
+        int score = search(board, Engine::MAX_DEPTH - 1, !is_white, INT_MIN, INT_MAX);
+
+        board.unmake_move();
+
+        if ((is_white && best_score < score) || (!is_white && best_score > score)) {
+            best_score = score;
+            best = move;
+        }
+    }
+
+    return best;
 }
 
 uint64_t Engine::perft(Board& board, int depth, bool is_white) {

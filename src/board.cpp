@@ -538,7 +538,7 @@ bool Board::is_attacked(int square, bool is_white) {
     uint64_t opp_queens = bitboards[opp_offset + Board::QUEEN];
     uint64_t opp_king = bitboards[opp_offset + Board::KING];
 
-    int own = (is_white) ? 1 : 0;
+    int own = (is_white) ? 0 : 1;
 
     uint64_t square_mask = 1ULL << square;
     if (opp_pawns & pawn_attacks[own][square]) return true;

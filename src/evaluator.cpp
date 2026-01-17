@@ -10,8 +10,15 @@ int Evaluator::king_safety(Board& board, bool is_white) {
     int protectors = __builtin_popcountll(protection);
     score += protectors * Evaluator::PROTECTION;
 
-    uint64_t danger_zone = (1ULL << board.king_position(is_white)) | adjacent;
+    int king_at = board.king_position(is_white);
+
+    uint64_t danger_zone = (1ULL << king_at) | adjacent;
     score -= reduce_squares(board, danger_zone, Evaluator::DANGER, is_white); 
+
+    int native_rank = (is_white) ? 0 : Board::SIDE - 1;
+    if (king_at / Board::SIDE != native_rank) {
+        score -= Evaluator::KING_PENALTY;
+    }
 
     return score;
 }
@@ -115,10 +122,21 @@ int Evaluator::pawn_structure(Board& board, bool is_white) {
     while (pawns) {
         int square = Board::pop_bit(&pawns);
         int rank = square / Board::SIDE;
-        if (abs(rank - final_rank) == 1) {
-            score += PAWN_SIXTH_RANK;
-        } else if (abs(rank - final_rank) == 2) {
-            score += PAWN_FIFTH_RANK;
+
+        int end_distance = abs(rank - final_rank);
+        
+        switch (end_distance) {
+            case 1:
+                score += PAWN_SEVENTH_RANK;
+                break;
+            case 2:
+                score += PAWN_SIXTH_RANK;
+                break;
+            case 3:
+                score += PAWN_FIFTH_RANK;
+                break;
+            default:
+                break;
         }
 
         uint64_t file_mask = 0x0101010101010101ULL;
