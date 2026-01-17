@@ -13,10 +13,26 @@
 void MoveGenerator::generate_pawn_moves(int from, bool is_white, std::vector<Move>& moves) {
     int direction = (is_white) ? UP : DOWN;
     
-    std::vector<int> offsets = {7, 8, 9, 16};
+    std::vector<int> offsets = {7, 8, 9};
+
+    int second_rank = (is_white) ? 1 : 6;
+    int rank = from / Board::SIDE;
+    if (rank == second_rank) offsets.push_back(16);
+
+    int from_file = from % Board::SIDE;
 
     for (int o : offsets) {
         int to = from + o * direction;
+
+        if (to < 0 || to >= 64) continue;
+
+        int to_file = to % Board::SIDE;
+
+        if (o == 7 || o == 9) {
+            int to_file = to % Board::SIDE;
+            if (abs(to_file - from_file) != 1) continue; 
+        }
+
         if (to / Board::SIDE == 0 || to / Board::SIDE == (Board::SIDE - 1)) {
             vector<int> promotables = {Board::KNIGHT, Board::ROOK, Board::QUEEN, Board::BISHOP};
 
@@ -30,6 +46,7 @@ void MoveGenerator::generate_pawn_moves(int from, bool is_white, std::vector<Mov
         }
     }
 }
+
 void MoveGenerator::generate_knight_moves(int from, bool is_white, std::vector<Move>& moves) {
     std::vector<int> offsets = {6, 10, 15, 17};
 
@@ -116,6 +133,14 @@ void MoveGenerator::generate_king_moves(int from, bool is_white, std::vector<Mov
 
         moves.push_back(pos);
         moves.push_back(neg);
+    }
+
+    if (is_white && from == 4) {
+        moves.push_back(Move(4, 6, Board::KING));
+        moves.push_back(Move(4, 2, Board::KING));
+    } else if (!is_white && from == 60) {
+        moves.push_back(Move(60, 62, Board::KING));
+        moves.push_back(Move(60, 58, Board::KING));
     }
 }
 

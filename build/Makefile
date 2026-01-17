@@ -178,6 +178,33 @@ src/board.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/src/board.cpp.s
 .PHONY : src/board.cpp.s
 
+src/engine.obj: src/engine.cpp.obj
+.PHONY : src/engine.obj
+
+# target to build an object file
+src/engine.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_engine.dir\build.make CMakeFiles/chess_engine.dir/src/engine.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/src/engine.cpp.obj
+.PHONY : src/engine.cpp.obj
+
+src/engine.i: src/engine.cpp.i
+.PHONY : src/engine.i
+
+# target to preprocess a source file
+src/engine.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_engine.dir\build.make CMakeFiles/chess_engine.dir/src/engine.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/src/engine.cpp.i
+.PHONY : src/engine.cpp.i
+
+src/engine.s: src/engine.cpp.s
+.PHONY : src/engine.s
+
+# target to generate assembly for a file
+src/engine.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_engine.dir\build.make CMakeFiles/chess_engine.dir/src/engine.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/src/engine.cpp.s
+.PHONY : src/engine.cpp.s
+
 src/evaluator.obj: src/evaluator.cpp.obj
 .PHONY : src/evaluator.obj
 
@@ -324,6 +351,30 @@ tests/test_board.s: tests/test_board.cpp.s
 tests/test_board.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_board.cpp.s
 .PHONY : tests/test_board.cpp.s
+
+tests/test_engine.obj: tests/test_engine.cpp.obj
+.PHONY : tests/test_engine.obj
+
+# target to build an object file
+tests/test_engine.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_engine.cpp.obj
+.PHONY : tests/test_engine.cpp.obj
+
+tests/test_engine.i: tests/test_engine.cpp.i
+.PHONY : tests/test_engine.i
+
+# target to preprocess a source file
+tests/test_engine.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_engine.cpp.i
+.PHONY : tests/test_engine.cpp.i
+
+tests/test_engine.s: tests/test_engine.cpp.s
+.PHONY : tests/test_engine.s
+
+# target to generate assembly for a file
+tests/test_engine.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/tests/test_engine.cpp.s
+.PHONY : tests/test_engine.cpp.s
 
 tests/test_evaluator.obj: tests/test_evaluator.cpp.obj
 .PHONY : tests/test_evaluator.obj
@@ -507,6 +558,9 @@ help:
 	@echo ... src/board.obj
 	@echo ... src/board.i
 	@echo ... src/board.s
+	@echo ... src/engine.obj
+	@echo ... src/engine.i
+	@echo ... src/engine.s
 	@echo ... src/evaluator.obj
 	@echo ... src/evaluator.i
 	@echo ... src/evaluator.s
@@ -525,6 +579,9 @@ help:
 	@echo ... tests/test_board.obj
 	@echo ... tests/test_board.i
 	@echo ... tests/test_board.s
+	@echo ... tests/test_engine.obj
+	@echo ... tests/test_engine.i
+	@echo ... tests/test_engine.s
 	@echo ... tests/test_evaluator.obj
 	@echo ... tests/test_evaluator.i
 	@echo ... tests/test_evaluator.s

@@ -24,8 +24,6 @@ private:
     uint64_t knight_attacks[TILES] = {};
     uint64_t king_attacks[TILES] = {};
 
-    uint16_t enpassant = 0;
-
     uint64_t rook_masks[TILES];
     static uint64_t rook_attacks[TILES][4096];
 
@@ -103,7 +101,6 @@ private:
 
     int turns_since_capture = 0;
 
-    vector<PastMove> move_history;
     
     bool legal_rook_move(Move move, bool is_white);
     bool legal_knight_move(Move move, bool is_white);
@@ -128,7 +125,7 @@ private:
     
     uint64_t find_rook_attacks(int sq, uint64_t blockers);
     uint64_t find_bishop_attacks(int sq, uint64_t blockers);
-
+    
     
     uint64_t find_rook_mask(int index);
     uint64_t find_bishop_mask(int index);
@@ -145,7 +142,10 @@ private:
 
 public:
     bool is_attacked(int square, bool is_white);
-    
+
+    vector<PastMove> move_history;
+    uint16_t enpassant = 0;
+
     static constexpr int PAWN = 0;
     static constexpr int ROOK = 1;
     static constexpr int KNIGHT = 2;
@@ -155,9 +155,7 @@ public:
     static constexpr int BLACK_SHIFT = 6;
     static constexpr int PIECES = 6;
     static constexpr int SIDE = 8;
-
     
-
     static constexpr int BLACK_PAWN = PAWN + BLACK_SHIFT;
     static constexpr int BLACK_ROOK = ROOK + BLACK_SHIFT;
     static constexpr int BLACK_KNIGHT = KNIGHT + BLACK_SHIFT;
@@ -168,7 +166,6 @@ public:
     // initialises the initial state of the board
     Board();
     
-
     // updates the board with a move
     bool move(Move move, bool is_white);
 
@@ -185,7 +182,7 @@ public:
     uint64_t get_occupancy(bool is_white);
     
     // returns the index of a coloured piecetype within the bitboard array
-    constexpr int bb_index(int type, bool is_white);
+    int bb_index(int type, bool is_white);
 
     // returns whether or not it is currently checkmate
     bool in_check(bool is_white);

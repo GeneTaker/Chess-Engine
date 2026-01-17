@@ -381,12 +381,9 @@ void Board::make_move_unchecked(Move move, bool is_white) {
         }
     }
 
-    if (move.type == Board::KING && abs(move.to - move.from) == DOUBLE) {
-        int castled_rook = (move.to + move.from) / 2;
-        uint64_t castled_rook_mask = 1ULL << castled_rook;
-
-        bitboards[own_offset + Board::ROOK] |= castled_rook_mask;
-        *own |= castled_rook_mask;
+    if (move.type == Board::KING &&
+        ((move.from == 4 && (move.to == 6 || move.to == 2)) ||
+        (move.from == 60 && (move.to == 62 || move.to == 58)))) {
         
         int rook_from, rook_to;
 
@@ -398,8 +395,14 @@ void Board::make_move_unchecked(Move move, bool is_white) {
             rook_to   = move.from - 1;
         }
 
-        bitboards[own_offset + Board::ROOK] ^= (1ULL << rook_from);
-        *own ^= (1ULL << rook_from);
+        uint64_t rook_from_mask = 1ULL << rook_from;
+        uint64_t rook_to_mask = 1ULL << rook_to;
+
+        bitboards[own_offset + Board::ROOK] ^= rook_from_mask;
+        bitboards[own_offset + Board::ROOK] ^= rook_to_mask;
+        
+        *own ^= rook_from_mask;
+        *own ^= rook_to_mask;
     }
 
     //castling
@@ -497,6 +500,15 @@ bool Board::is_legal_move(Move move, bool is_white) {
 }
 
 bool Board::check_evade(Move m, bool is_white) {
+    uint64_t saved_white = white_bitboard;
+    uint64_t saved_black = black_bitboard;
+    uint64_t saved_bitboards[Board::UNIQUE_PIECES];
+    uint8_t saved_castle = castle_rights;
+    uint16_t saved_enpassant = enpassant;
+
+    for (int i = 0; i < Board::UNIQUE_PIECES; i++) {
+        saved_bitboards[i] = bitboards[i];
+    }
     make_move_unchecked(m, is_white);
 
     bool result = true;
@@ -505,7 +517,14 @@ bool Board::check_evade(Move m, bool is_white) {
         result = false;
     }
 
-    unmake_move();
+    white_bitboard = saved_white;
+    black_bitboard = saved_black;
+    castle_rights = saved_castle;
+    enpassant = saved_enpassant;
+    for (int i = 0; i < Board::UNIQUE_PIECES; i++) {
+        bitboards[i] = saved_bitboards[i];
+    }
+    move_history.pop_back();
     return result;
 }
 
@@ -519,7 +538,7 @@ bool Board::is_attacked(int square, bool is_white) {
     uint64_t opp_queens = bitboards[opp_offset + Board::QUEEN];
     uint64_t opp_king = bitboards[opp_offset + Board::KING];
 
-    int own = (is_white) ? 0 : 1;
+    int own = (is_white) ? 1 : 0;
 
     uint64_t square_mask = 1ULL << square;
     if (opp_pawns & pawn_attacks[own][square]) return true;
@@ -570,7 +589,6 @@ bool Board::legal_pawn_move(Move move, bool is_white) {
     // Capture
     uint64_t capture_left = (is_white) ? (from_mask & ~Board::FILE_A) << (Board::SIDE - 1) : (from_mask & ~Board::FILE_H) >> (Board::SIDE + 1);
     uint64_t capture_right = (is_white) ? (from_mask & ~Board::FILE_H) << (Board::SIDE + 1) : (from_mask & ~Board::FILE_A) >> (Board::SIDE - 1);
-
 
     if ((capture_left | capture_right) & to_mask & other) {
         return true;
@@ -656,24 +674,25 @@ bool Board::legal_king_move(Move move, bool is_white) {
 
         if (is_white) {
             if (Board::CASTLE_WS & castle_rights && move.to == 6) {
-                uint64_t short_mask = 0x60ULL;
-                if (is_attacked(5, is_white)) return false;
-                return (short_mask & occupied) == 0;
+                uint64_t short_mask = (1ULL << 5) | (1ULL << 6);
+                if (is_attacked(6, is_white) || is_attacked(5, is_white)) return false;
+
+                return ((short_mask & occupied) == 0);
             }
             if (Board::CASTLE_WL & castle_rights && move.to == 2) {
-                uint64_t long_mask = 0xEULL;
-                if (is_attacked(3, is_white)) return false;
+                uint64_t long_mask = (1ULL << 2) | (1ULL << 3);
+                if (is_attacked(3, is_white) || is_attacked(2, is_white)) return false;
                 return (long_mask & occupied) == 0;
             }
         } else {
             if (Board::CASTLE_BS & castle_rights && move.to == 62) {
-                uint64_t short_mask = 0x60ULL << (Board::TILES - 5);
-                if (is_attacked(61, is_white)) return false;
+                uint64_t short_mask = (1ULL << 61) | (1ULL << 62);
+                if (is_attacked(61, is_white) || is_attacked(62, is_white)) return false;
                 return (short_mask & occupied) == 0;
             }
             if (Board::CASTLE_BL & castle_rights && move.to == 58) {
-                uint64_t long_mask = 0xEULL << (Board::TILES - Board::SIDE);
-                if (is_attacked(59, is_white)) return false;
+                uint64_t long_mask = (1ULL << 58) | (1ULL << 59);
+                if (is_attacked(59, is_white) || is_attacked(58, is_white)) return false;
                 return (long_mask & occupied) == 0;
             }
         }
@@ -706,7 +725,7 @@ uint64_t Board::get_occupancy(bool is_white) {
     return (is_white) ? white_bitboard : black_bitboard;
 }
 
-constexpr int Board::bb_index(int type, bool is_white) {
+int Board::bb_index(int type, bool is_white) {
     int offset = 0;
     if (!is_white) {
         offset = BLACK_SHIFT;
@@ -727,6 +746,7 @@ bool Board::in_check(bool is_white) {
 
 void Board::unmake_move() {
     PastMove last_move = move_history.back();
+    
     move_history.pop_back();
 
     uint64_t to_mask = 1ULL << last_move.to;
@@ -745,15 +765,20 @@ void Board::unmake_move() {
         opp_board = &white_bitboard;
     }
 
-    bitboards[last_move.piece_moved] |= from_mask;
-    *own_board |= from_mask;
-    *own_board ^= to_mask;
+    int own_offset = colour * Board::PIECES;
 
     if (last_move.promotion_piece != NONE) {
-        bitboards[last_move.promotion_piece] ^= to_mask;
+        bitboards[last_move.promotion_piece + own_offset] &= ~to_mask;
+        bitboards[last_move.piece_moved] |= from_mask;
     } else {
-        bitboards[last_move.piece_moved] ^= to_mask;
+        bitboards[last_move.piece_moved] &= ~to_mask;
+        bitboards[last_move.piece_moved] |= from_mask;
     }
+
+    // bitboards[last_move.piece_moved] ^= from_mask;
+    *own_board &= ~to_mask;
+    *own_board |= from_mask;
+
 
     if (last_move.captured_square != NONE) {
         int restore = last_move.captured_piece;
@@ -761,15 +786,9 @@ void Board::unmake_move() {
         *opp_board |= 1ULL << last_move.captured_square;
     }
 
-    int own_offset = colour * Board::PIECES;
-
-    if (last_move.piece_moved % Board::PIECES == Board::KING && abs(last_move.to - last_move.from) == DOUBLE) {
-        int castled_rook = (last_move.to + last_move.from) / 2;
-        uint64_t castled_rook_mask = 1ULL << castled_rook;
-
-        bitboards[own_offset + Board::ROOK] ^= castled_rook_mask;
-        *own_board ^= castled_rook_mask;
-        
+    if ((last_move.piece_moved % Board::PIECES == Board::KING) &&
+        ((last_move.from == 4 && (last_move.to == 6 || last_move.to == 2)) ||
+        (last_move.from == 60 && (last_move.to == 62 || last_move.to == 58)))) {        
         int rook_from, rook_to;
 
         if (last_move.to > last_move.from) {
@@ -780,8 +799,14 @@ void Board::unmake_move() {
             rook_to   = last_move.from - 1;
         }
 
-        bitboards[own_offset + Board::ROOK] |= (1ULL << rook_from);
-        *own_board |= (1ULL << rook_from);
+        uint64_t rook_from_mask = 1ULL << rook_from;
+        uint64_t rook_to_mask = 1ULL << rook_to;
+
+        bitboards[own_offset + Board::ROOK] |= rook_from_mask;
+        bitboards[own_offset + Board::ROOK] &= ~rook_to_mask;
+        
+        *own_board |= rook_from_mask;
+        *own_board &= ~rook_to_mask;
     }
 
     castle_rights = last_move.castle_rights;
