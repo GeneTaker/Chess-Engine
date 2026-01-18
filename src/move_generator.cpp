@@ -29,7 +29,6 @@ void MoveGenerator::generate_pawn_moves(int from, bool is_white, std::vector<Mov
         int to_file = to % Board::SIDE;
 
         if (o == 7 || o == 9) {
-            int to_file = to % Board::SIDE;
             if (abs(to_file - from_file) != 1) continue; 
         }
 
@@ -47,7 +46,7 @@ void MoveGenerator::generate_pawn_moves(int from, bool is_white, std::vector<Mov
     }
 }
 
-void MoveGenerator::generate_knight_moves(int from, bool is_white, std::vector<Move>& moves) {
+void MoveGenerator::generate_knight_moves(int from, std::vector<Move>& moves) {
     std::vector<int> offsets = {6, 10, 15, 17};
 
     for (int o : offsets) {
@@ -59,7 +58,7 @@ void MoveGenerator::generate_knight_moves(int from, bool is_white, std::vector<M
     }
 }
 
-void MoveGenerator::generate_rook_moves(int from, bool is_white, std::vector<Move>& moves) {
+void MoveGenerator::generate_rook_moves(int from, std::vector<Move>& moves) {
     generate_cardinals(from, moves, Board::ROOK);
 }
 
@@ -83,7 +82,7 @@ void MoveGenerator::generate_cardinals(int from, std::vector<Move>& moves, int p
     
 }
 
-void MoveGenerator::generate_bishop_moves(int from, bool is_white, std::vector<Move>& moves) {
+void MoveGenerator::generate_bishop_moves(int from, std::vector<Move>& moves) {
     generate_diagonals(from, moves, Board::BISHOP);
 }
 
@@ -119,7 +118,7 @@ void MoveGenerator::generate_diagonals(int from, std::vector<Move>& moves, int p
 }
 
 
-void MoveGenerator::generate_queen_moves(int from, bool is_white, std::vector<Move>& moves) {
+void MoveGenerator::generate_queen_moves(int from, std::vector<Move>& moves) {
     generate_diagonals(from, moves, Board::QUEEN);
     generate_cardinals(from, moves, Board::QUEEN);
 }
@@ -154,23 +153,22 @@ std::vector<Move> MoveGenerator::generate_moves(Board& board, bool is_white) {
 
         while (temp != 0) {
             int from = Board::pop_bit(&temp);
-            uint64_t from_mask = 1ULL << from;
 
             switch (i) {
                 case Board::PAWN:
                     generate_pawn_moves(from, is_white, result);
                     break;  
                 case Board::ROOK:
-                    generate_rook_moves(from, is_white, result);
+                    generate_rook_moves(from, result);
                     break;  
                 case Board::BISHOP:
-                    generate_bishop_moves(from, is_white, result);
+                    generate_bishop_moves(from, result);
                     break;  
                 case Board::KNIGHT:
-                    generate_knight_moves(from, is_white, result);
+                    generate_knight_moves(from, result);
                     break;  
                 case Board::QUEEN:
-                    generate_queen_moves(from, is_white, result);
+                    generate_queen_moves(from, result);
                     break;  
                 case Board::KING:
                     generate_king_moves(from, is_white, result);

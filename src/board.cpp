@@ -1,6 +1,7 @@
 #include "../include/board.h"
 #include <vector>
 #include <algorithm>
+#include <string>
 
 #define UP 1
 #define DOWN -1
@@ -70,7 +71,7 @@ void Board::init_rook_moves() {
         uint64_t mask = rook_masks[sq];
         int bit_count = num_bits(mask);
 
-        for (int i = 0; i < (1ULL << bit_count); i++) {
+        for (int i = 0; i < (1 << bit_count); i++) {
             uint64_t blockers = set_occupancy(mask, bit_count, i);
 
             uint64_t attacks = find_rook_attacks(sq, blockers);
@@ -203,7 +204,7 @@ void Board::init_bishop_moves() {
         uint64_t mask = bishop_masks[sq];
         int bit_count = num_bits(mask);
 
-        for (int i = 0; i < (1ULL << bit_count); i++) {
+        for (int i = 0; i < (1 << bit_count); i++) {
             uint64_t blockers = set_occupancy(mask, bit_count, i);
             
             uint64_t attacks = find_bishop_attacks(sq, blockers);
@@ -476,16 +477,16 @@ bool Board::is_legal_move(Move move, bool is_white) {
             legal = legal_pawn_move(move, is_white);
             break;        
         case Board::ROOK:
-            legal = legal_rook_move(move, is_white);
+            legal = legal_rook_move(move);
             break;
         case Board::KNIGHT:
-            legal = legal_knight_move(move, is_white);
+            legal = legal_knight_move(move);
             break;
         case Board::BISHOP:
-            legal = legal_bishop_move(move, is_white);
+            legal = legal_bishop_move(move);
             break;
         case Board::QUEEN:
-            legal = legal_queen_move(move, is_white);
+            legal = legal_queen_move(move);
             break;
         case Board::KING:
             legal = legal_king_move(move, is_white);
@@ -540,12 +541,10 @@ bool Board::is_attacked(int square, bool is_white) {
 
     int own = (is_white) ? 0 : 1;
 
-    uint64_t square_mask = 1ULL << square;
     if (opp_pawns & pawn_attacks[own][square]) return true;
     if (opp_knights & knight_attacks[square]) return true;
     if (opp_king & king_attacks[square]) return true;
 
-    uint64_t occupied = white_bitboard | black_bitboard;
     // Bishops/queens
     uint64_t attack_bishops = get_bishop_attacks(square);
     if (attack_bishops & (opp_bishops | opp_queens)) return true;
@@ -616,7 +615,7 @@ bool Board::legal_pawn_move(Move move, bool is_white) {
     return false;
 }
 
-bool Board::legal_rook_move(Move move, bool is_white) {
+bool Board::legal_rook_move(Move move) {
     uint64_t attacks = get_rook_attacks(move.from);
 
     return !((attacks & (1ULL << move.to)) == 0);
@@ -633,22 +632,22 @@ uint64_t Board::get_rook_attacks(int square) {
     return attacks;
 }
 
-bool Board::legal_knight_move(Move move, bool is_white) {
+bool Board::legal_knight_move(Move move) {
     uint64_t legal_moves = knight_attacks[move.from];
     uint64_t to_mask = 1ULL << move.to;
 
     return !((legal_moves & to_mask) == 0);
 }
 
-bool Board::legal_queen_move(Move move, bool is_white) {
-    return legal_rook_move(move, is_white) || legal_bishop_move(move, is_white);
+bool Board::legal_queen_move(Move move) {
+    return legal_rook_move(move) || legal_bishop_move(move);
 }
 
 uint64_t Board::get_queen_attacks(int square) {
     return get_rook_attacks(square) | get_bishop_attacks(square);
 }
 
-bool Board::legal_bishop_move(Move move, bool is_white) {
+bool Board::legal_bishop_move(Move move) {
     uint64_t attacks = get_bishop_attacks(move.from);
     uint64_t to_mask = (1ULL << move.to);
 
@@ -711,10 +710,72 @@ bool Board::can_promote(Move move, bool is_white) {
     return false;
 }
 
-void Board::print_bitboards() {
-    for (auto& b : bitboards) {
-        cout << b << endl;
+void Board::print_board(bool is_white) {
+    cout << "\n  +---+---+---+---+---+---+---+---+" << endl;
+
+    if (is_white) {
+        for (int r = Board::SIDE; r >= 1; r--) {
+            print_row(r);
+        }
+    } else {
+        for (int r = 1; r <= Board::SIDE; r++) {
+            print_row(r);
+        }
     }
+    cout <<  "    a   b   c   d   e   f   g   h\n" << endl;
+    
+}
+
+void Board::print_row(int r) {
+    cout << r << " ";
+        
+    for (int f = 0; f < Board::SIDE; f++) {
+        int square = (r - 1) * Board::SIDE + f;
+        
+        cout << "| " << get_piece_at(square) << " ";           
+    }
+
+    cout << "|" << endl;
+    cout << "  +---+---+---+---+---+---+---+---+" << endl;
+}
+
+std::string Board::get_piece_at(int square) {
+    uint64_t square_mask = 1ULL << square;
+
+    for (int i = 0; i < Board::UNIQUE_PIECES; i++) {
+        if (square_mask & bitboards[i]) {            
+            switch (i) {
+                case Board::PAWN:
+                    return "P";               
+                case Board::KNIGHT:
+                    return "N";                
+                case Board::BISHOP:
+                    return "B";                
+                case Board::ROOK:
+                    return "R";               
+                case Board::QUEEN:
+                    return "Q";
+                case Board::KING:
+                    return "K";                
+                case Board::BLACK_PAWN:
+                    return "p";                
+                case Board::BLACK_KNIGHT:
+                    return "n";                
+                case Board::BLACK_BISHOP:
+                    return "b";                
+                case Board::BLACK_ROOK:
+                    return "r";                
+                case Board::BLACK_QUEEN:
+                    return "q";                
+                case Board::BLACK_KING:
+                    return "k";
+                default:
+                    break;                
+            }
+
+        }
+    }
+    return ".";
 }
 
 uint64_t Board::get_bitboard(int index) {
@@ -814,12 +875,11 @@ void Board::unmake_move() {
 }
 
 bool Board::is_checkmate(bool is_white) {
-    MoveGenerator generator;
-
     if (!in_check(is_white)) {
         return false;
     }
 
+    MoveGenerator generator;
     vector<Move> all_moves = generator.generate_moves(*this, is_white);
 
     for (Move m : all_moves) {
@@ -829,12 +889,11 @@ bool Board::is_checkmate(bool is_white) {
     return true;
 }
 bool Board::is_stalemate(bool is_white) {
-    MoveGenerator generator;
-
     if (in_check(is_white)) {
         return false;
     }
 
+    MoveGenerator generator;
     vector<Move> all_moves = generator.generate_moves(*this, is_white);
     
     for (Move m : all_moves) {
@@ -854,6 +913,23 @@ vector<Move> Board::find_legal_moves(bool is_white) {
     }
 
     return filter_moves;
+}
+
+vector<Move> Board::find_legal_attacks(bool is_white) {
+    vector<Move> legal_moves = find_legal_moves(is_white);
+    vector<Move> result;
+
+    uint64_t opp_board = (is_white) ? black_bitboard : white_bitboard;
+
+    for (auto m : legal_moves) {
+        uint64_t to_mask = 1ULL << m.to;
+        
+        if (opp_board & to_mask) {
+            result.push_back(m);
+        }
+    }
+
+    return result;
 }
 
 bool Board::is_three_fold() {
@@ -878,8 +954,6 @@ bool Board::bitboards_equal(Board board) {
 }
 
 bool Board::insufficient_material() {
-    uint64_t all_pieces = white_bitboard | black_bitboard;
-
     uint64_t white_pawns   = bitboards[PAWN];
     uint64_t white_rooks   = bitboards[ROOK];
     uint64_t white_queens  = bitboards[QUEEN];
@@ -944,4 +1018,16 @@ int Board::king_position(bool is_white) {
 
     int position = __builtin_ctzll(king_board);
     return position;
+}
+
+int Board::find_piece_moved(int from) {
+    for (int i = 0; i < Board::UNIQUE_PIECES; i++) {
+        uint64_t from_mask = 1ULL << from;
+
+        if (bitboards[i] & from_mask) {
+            return i;
+        }
+    }
+
+    return -1;
 }

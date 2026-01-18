@@ -102,10 +102,10 @@ private:
     int turns_since_capture = 0;
 
     
-    bool legal_rook_move(Move move, bool is_white);
-    bool legal_knight_move(Move move, bool is_white);
-    bool legal_queen_move(Move move, bool is_white);
-    bool legal_bishop_move(Move move, bool is_white);
+    bool legal_rook_move(Move move);
+    bool legal_knight_move(Move move);
+    bool legal_queen_move(Move move);
+    bool legal_bishop_move(Move move);
     bool legal_king_move(Move move, bool is_white);
     
     
@@ -140,6 +140,8 @@ private:
   
     bool bitboards_equal(Board board);
 
+    void print_row(int r);
+
 public:
     bool is_attacked(int square, bool is_white);
 
@@ -173,7 +175,9 @@ public:
     void make_move_unchecked(Move move, bool is_white);
     
     // prints all bitboards for debugging purposes
-    void print_bitboards();
+    void print_board(bool is_white);
+
+    std::string get_piece_at(int square);
 
     // gets a particular bitboard from the board
     uint64_t get_bitboard(int index);
@@ -202,6 +206,9 @@ public:
     // returns all legal moves
     vector<Move> find_legal_moves(bool is_white);
 
+    // returns all legal capture moves 
+    vector<Move> find_legal_attacks(bool is_white);
+
     // checks whether it is a draw, through repeated moves
     bool is_three_fold();
     
@@ -220,6 +227,8 @@ public:
     int king_position(bool is_white);
 
     static int pop_bit(uint64_t *mask);
+
+    int find_piece_moved(int from);
 };
 
 #endif

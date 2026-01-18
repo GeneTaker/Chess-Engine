@@ -13,6 +13,7 @@ private:
     Evaluator evaluator;
 
     int search(Board& board, int depth, bool is_white, int alpha, int beta);
+    int quiescence(Board& board, bool is_white, int alpha, int beta, int depth);
 
 public:
     Move best_move(Board& board, bool is_white);

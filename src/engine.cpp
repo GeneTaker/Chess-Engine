@@ -5,73 +5,77 @@
 
 int Engine::search(Board& board, int depth, bool is_white, int alpha, int beta) {
     if (depth == 0) {
-        return evaluator.evaluate_position(board, is_white);
+        return quiescence(board, is_white, alpha, beta, 0);
     }
 
     std::vector<Move> all_moves = board.find_legal_moves(is_white);
 
     if (board.is_checkmate(is_white)) {
-        return INT_MIN;
+        return -999999;
     }
 
     if (all_moves.size() == 0) {
         return 0;
     }
 
-    if (is_white) {
-        int best_val = INT_MIN;
+    int best_val = -999999;
 
-        for (auto m : all_moves) {
-            board.make_move_unchecked(m, is_white);
-            int score = search(board, depth - 1, !is_white, -beta, -alpha);
-            board.unmake_move();
+    for (auto m : all_moves) {
+        board.make_move_unchecked(m, is_white);
+        int score = -search(board, depth - 1, !is_white, -beta, -alpha);
+        board.unmake_move();
 
-            best_val = std::max(best_val, score);
-            alpha = std::max(alpha, best_val);
+        best_val = std::max(best_val, score);
+        alpha = std::max(alpha, best_val);
 
-            // If the other player can guarantee us a worse position
-            if (alpha >= beta) {
-                break;
-            }
-        } 
-        return best_val;
-    } else {
-        int best_val = INT_MAX;
-        
-        for (auto m : all_moves) {
-            board.make_move_unchecked(m, is_white);
-            int score = -1 * search(board, depth - 1, !is_white, alpha, beta);
-            board.unmake_move();
-
-            best_val = std::min(best_val, score);
-            beta = std::min(beta, best_val);
-
-            if (alpha >= beta) {
-                break;
-            }
-
+        // If the other player can guarantee us a worse position
+        if (alpha >= beta) {
+            break;
         }
-        return best_val;
+    } 
+    return best_val;
+}
+
+int Engine::quiescence(Board& board, bool is_white, int alpha, int beta, int q_depth) {
+    int initial = evaluator.evaluate_position(board, is_white);
+
+    if (initial >= beta) return beta;
+    if (alpha < initial) alpha = initial;
+
+    if (q_depth >= 10) return initial;
+
+    vector<Move> attacks = board.find_legal_attacks(is_white);
+
+    for (auto a : attacks) {
+        board.make_move_unchecked(a, is_white);
+        int score = -quiescence(board, !is_white, -beta, -alpha, q_depth + 1);
+        board.unmake_move();
+
+        if (score >= beta) return beta;
+        if (alpha < score) alpha = score;
     }
+
+    return alpha;
 }
 
 Move Engine::best_move(Board& board, bool is_white) {
     std::vector<Move> all_moves = board.find_legal_moves(is_white);
 
     Move best(1, 1, Board::KING);
-    int best_score = (is_white) ? INT_MIN : INT_MAX;
+    int best_score = -999999;
 
     for (auto move : all_moves) {
         board.make_move_unchecked(move, is_white);
 
-        int score = search(board, Engine::MAX_DEPTH - 1, !is_white, INT_MIN, INT_MAX);
+        int score = -search(board, Engine::MAX_DEPTH - 1, !is_white, -999999, 999999);
 
         board.unmake_move();
 
-        if ((is_white && best_score < score) || (!is_white && best_score > score)) {
+        if (best_score < score) {
             best_score = score;
-            best = move;
+            best = move;            
         }
+
     }
 
     return best;
