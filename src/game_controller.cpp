@@ -3,13 +3,15 @@
 #include "../include/board.h"
 #include "../include/game_controller.h"
 
+#define NONE NONE
+
 int GameController::parse_to_square(string input) {
-    if (input.size() != 2) return -1;
+    if (input.size() != 2) return NONE;
 
     int file = input[0] - 'a';
     int rank = input[1] - '1';
 
-    if (file < 0 || file > 7 || rank < 0 || rank > 7) return -1;
+    if (file < 0 || file > 7 || rank < 0 || rank > 7) return NONE;
     
     return rank * Board::SIDE + file;
 }
@@ -92,15 +94,15 @@ bool GameController::move_piece(string from, string to, bool is_white) {
     int square_from = parse_to_square(from);
     int square_to = parse_to_square(to);
 
-    if (square_from == -1 || square_to == -1) return false;
+    if (square_from == NONE || square_to == NONE) return false;
 
     int to_rank = square_to / Board::SIDE;
     int final_rank = (is_white) ? Board::SIDE - 1 : 0;
     
     int piece_moved = board.find_piece_moved(square_from) % Board::PIECES;
-    if (piece_moved == -1) return false;   
+    if (piece_moved == NONE) return false;   
     
-    int promote_to = -1;
+    int promote_to = NONE;
 
     // Promotion logic
     if (to_rank == final_rank && piece_moved % Board::PIECES == Board::PAWN) {
@@ -128,7 +130,7 @@ bool GameController::move_piece(string from, string to, bool is_white) {
         }
     }
 
-    if (promote_to != -1) {
+    if (promote_to != NONE) {
         return board.move(Move(square_from, square_to, piece_moved, promote_to), is_white);
     }
 

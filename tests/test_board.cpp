@@ -60,7 +60,7 @@ TEST_CASE("Board test, ensure board is initialised properly") {
     REQUIRE(black & (1ULL << 61));
 }
 
-TEST_CASE("50 turn rule") {
+TEST_CASE("Is 3 fold repetition") {
     Board board;
 
     Move m1(1, 18, Board::KNIGHT);

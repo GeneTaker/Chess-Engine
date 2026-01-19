@@ -13,20 +13,54 @@ using namespace std;
 
 class Board {
 private:
+    // The total number of unique types of pieces (both black and white)
     static constexpr int UNIQUE_PIECES = 12;
 
+    // An array of bitboards, one for each unique piece
     uint64_t bitboards[UNIQUE_PIECES] = {};
+
+    // These bitboards are to show if squares are occupied by white pieces or black pieces
     uint64_t white_bitboard = 0ULL;
     uint64_t black_bitboard = 0ULL;
 
+    // THe total number of tiles on the chess board
     static constexpr int TILES = 64;
 
+    // The ways a knight can attack from any tile of the board
     uint64_t knight_attacks[TILES] = {};
+    // The ways a king can attack from any tile of the board
     uint64_t king_attacks[TILES] = {};
 
-    uint64_t rook_masks[TILES];
-    static uint64_t rook_attacks[TILES][4096];
 
+    ////////////////////////////////
+    //        Sliding Pieces      //
+    ////////////////////////////////
+
+    // Finds the number of 1 bits in a mask
+    int num_bits(uint64_t mask);
+    
+    // Used to map a mask into squares on the board 
+    uint64_t set_occupancy(uint64_t mask, int bits, int index);
+    
+    // An array of masks that shows the tiles a sliding piece can be blocked by
+    uint64_t rook_masks[TILES];
+    uint64_t bishop_masks[TILES];
+    
+    // A 2d array that stores each possible configuration of movements a sliding piece can make
+    // given a particular blocker configuration
+    static uint64_t rook_attacks[TILES][4096];
+    static uint64_t bishop_attacks[TILES][512];
+    
+    // Fills their respective attacks arrays with possible attacks, given a set of blockers
+    uint64_t find_rook_attacks(int sq, uint64_t blockers);
+    uint64_t find_bishop_attacks(int sq, uint64_t blockers);
+    
+    // Used to precompute respective mask arrays
+    uint64_t find_rook_mask(int index);
+    uint64_t find_bishop_mask(int index);
+
+    // The magic numbers needed to translate a blocker configuration into an entry in
+    // their respective attack arrays
     const uint64_t rook_magic[TILES] = {
         0x0080001020400080ULL, 0x0040001000200040ULL, 0x0080081000200080ULL, 0x0080040800100080ULL,
         0x0080020400080080ULL, 0x0080010200040080ULL, 0x0080008001000200ULL, 0x0080002040800100ULL,
@@ -45,22 +79,7 @@ private:
         0x00FFFCDDFCED714AULL, 0x007FFCDDFCED714AULL, 0x003FFFCDFFD88096ULL, 0x0000040810002101ULL,
         0x0001000204080011ULL, 0x0001000204000801ULL, 0x0001000082000401ULL, 0x0001FFFAABFAD1A2ULL
     };
-
-    const int rook_shift[TILES] = {
-        12, 11, 11, 11, 11, 11, 11, 12,
-        11, 10, 10, 10, 10, 10, 10, 11,
-        11, 10, 10, 10, 10, 10, 10, 11,
-        11, 10, 10, 10, 10, 10, 10, 11,
-        11, 10, 10, 10, 10, 10, 10, 11,
-        11, 10, 10, 10, 10, 10, 10, 11,
-        11, 10, 10, 10, 10, 10, 10, 11,
-        12, 11, 11, 11, 11, 11, 11, 12
-    };
     
-    uint64_t bishop_masks[TILES];
-
-    static uint64_t bishop_attacks[TILES][512];
-
     const uint64_t bishop_magic[TILES] = {
         0x40040844404084ULL,   0x2004208a004208ULL,   0x10190041080202ULL,   0x108060845042010ULL,
         0x581104180800210ULL,  0x2112080446200010ULL, 0x1080820820060210ULL, 0x3c0808410220200ULL,
@@ -80,6 +99,18 @@ private:
         0x28000010020204ULL,   0x6000020202d0240ULL,  0x8918844842082200ULL, 0x4010011029020020ULL
     };
 
+    // The number of blockers a sliding piece can have on any tile
+    const int rook_shift[TILES] = {
+        12, 11, 11, 11, 11, 11, 11, 12,
+        11, 10, 10, 10, 10, 10, 10, 11,
+        11, 10, 10, 10, 10, 10, 10, 11,
+        11, 10, 10, 10, 10, 10, 10, 11,
+        11, 10, 10, 10, 10, 10, 10, 11,
+        11, 10, 10, 10, 10, 10, 10, 11,
+        11, 10, 10, 10, 10, 10, 10, 11,
+        12, 11, 11, 11, 11, 11, 11, 12
+    };
+    
     const int bishop_shift[TILES] = {
         6, 5, 5, 5, 5, 5, 5, 6,
         5, 5, 5, 5, 5, 5, 5, 5,
@@ -91,24 +122,30 @@ private:
         6, 5, 5, 5, 5, 5, 5, 6
     };
 
+    // The number of colours on the board 
     static constexpr int SIDES = 2;
     
+    // Mask constants that represent whether or not we can castle for both colours
+    // in castle_rights 
     static constexpr int CASTLE_WS = (1ULL << 0);
     static constexpr int CASTLE_WL = (1ULL << 1);
     static constexpr int CASTLE_BS = (1ULL << 2);
     static constexpr int CASTLE_BL = (1ULL << 3);
+
+    // Set to 0xF = 0b1111 since all castling configurations are initially possible
+    // ignoring blockers and attackers
     uint8_t castle_rights = 0xF;
-
-    int turns_since_capture = 0;
-
     
+    // Checks whether a move is possible for each respective piece
     bool legal_rook_move(Move move);
     bool legal_knight_move(Move move);
     bool legal_queen_move(Move move);
     bool legal_bishop_move(Move move);
     bool legal_king_move(Move move, bool is_white);
+    bool legal_pawn_move(Move move, bool is_white);
+    bool is_legal_move(Move move, bool is_white);
     
-    
+    // Checks whether or not a piece can promote
     bool can_promote(Move move, bool is_white);
     
     // initialises a board of possible knight attacks from every square
@@ -117,37 +154,40 @@ private:
     void init_bishop_moves(); 
     void init_king_moves(); 
     void init_pawn_attacks();
+
+    // Helper function for init_pawn_attacks. Initialises a pawn's attacks from
+    // a square 
     void pawn_helper(vector<int> offsets, int colour, int index);
     
-    int num_bits(uint64_t mask);
-
-    uint64_t set_occupancy(uint64_t mask, int bits, int index);
-    
-    uint64_t find_rook_attacks(int sq, uint64_t blockers);
-    uint64_t find_bishop_attacks(int sq, uint64_t blockers);
-    
-    
-    uint64_t find_rook_mask(int index);
-    uint64_t find_bishop_mask(int index);
-    
+    // Masks representing files A and H on a chess board
     static constexpr uint64_t FILE_A = 0x0101010101010101ULL;
     static constexpr uint64_t FILE_H = 0x8080808080808080ULL;
+    
+    // Stores a pawn's possible attacks from any tile on the board
     uint64_t pawn_attacks[SIDES][TILES] = {};
-
+    
+    // Checks if a move is illegal and puts their own king in check
     bool check_evade(Move move, bool is_white);
-    bool legal_pawn_move(Move move, bool is_white);
-    bool is_legal_move(Move move, bool is_white);
-  
+    
+    // Checks if two boards are equal through their bitboards
     bool bitboards_equal(Board board);
 
+    // Prints a row of the board
     void print_row(int r);
-
-public:
-    bool is_attacked(int square, bool is_white);
-
+    
+    // Stores a list of previous moves
     vector<PastMove> move_history;
+    
+    // Stores the enpassant rights for both sides, bits 0-7 represents rank 3 for
+    // black enpassants and bits 8-15 represents rank 6 for white
     uint16_t enpassant = 0;
 
+public:
+    // Checks if a square is attacked by the enemy
+    bool is_attacked(int square, bool is_white);
+
+    // Constants assigned to each piece, each constant is used to
+    // map a bitboards[] entry to the respective bitboard entry
     static constexpr int PAWN = 0;
     static constexpr int ROOK = 1;
     static constexpr int KNIGHT = 2;
@@ -168,7 +208,7 @@ public:
     // initialises the initial state of the board
     Board();
     
-    // updates the board with a move
+    // updates the board with a move, returns false if unsuccessful (due to an illegal move)
     bool move(Move move, bool is_white);
 
     // makes a move regardless of legality
@@ -194,9 +234,6 @@ public:
     // reverts the board to its state before the last made move
     void unmake_move();
 
-    // gets the number of turns since the last made capture
-    int get_turns_since_capture();
-
     // returns whether or not it is currently checkmate
     bool is_checkmate(bool is_white);
     
@@ -212,24 +249,33 @@ public:
     // checks whether it is a draw, through repeated moves
     bool is_three_fold();
     
-    bool is_over(bool is_white);
-    
-    bool is_draw(bool is_white);
-
+    // checks if the game is a draw due to insufficient material
     bool insufficient_material();
     
+    // Checks if the game is over
+    bool is_over(bool is_white);
+    
+    // Checks if the game has led to a draw
+    bool is_draw(bool is_white);
+
+    /*
+    Fetches the attack pattern of a sliding piece on a square
+    */
     uint64_t get_rook_attacks(int square);
-    
     uint64_t get_bishop_attacks(int square);
-    
     uint64_t get_queen_attacks(int square);
-    
+
+    // Returns a bitboard highlighting all the squares the king is adjacent to
     uint64_t king_adjacent(bool is_white);
     
+    // Fetches the king's position
     int king_position(bool is_white);
 
+    // A helper function which replaces the lowest bit in a bitstring with a 0
+    // and returns it's position from the back 
     static int pop_bit(uint64_t *mask);
 
+    // Finds the piece type of the piece at a square
     int find_piece_moved(int from);
 };
 

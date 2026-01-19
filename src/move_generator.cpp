@@ -12,22 +12,27 @@
 
 void MoveGenerator::generate_pawn_moves(int from, bool is_white, std::vector<Move>& moves) {
     int direction = (is_white) ? UP : DOWN;
-    
+
+    // Possible pawn moves    
     std::vector<int> offsets = {7, 8, 9};
 
+    // Adds 16 as an offset if we capable of double pushing it
     int second_rank = (is_white) ? 1 : 6;
     int rank = from / Board::SIDE;
     if (rank == second_rank) offsets.push_back(16);
 
     int from_file = from % Board::SIDE;
 
+    // For every offset
     for (int o : offsets) {
         int to = from + o * direction;
 
+        // Ensure within vertical bounds
         if (to < 0 || to >= 64) continue;
 
         int to_file = to % Board::SIDE;
 
+        // Ensure within sides of the board
         if (o == 7 || o == 9) {
             if (abs(to_file - from_file) != 1) continue; 
         }
@@ -36,6 +41,7 @@ void MoveGenerator::generate_pawn_moves(int from, bool is_white, std::vector<Mov
             vector<int> promotables = {Board::KNIGHT, Board::ROOK, Board::QUEEN, Board::BISHOP};
 
             for (int p : promotables) {
+                // Add a move for every possible promotion
                 Move m(from, to, Board::PAWN, p);
                 moves.push_back(m);
             }
@@ -47,6 +53,7 @@ void MoveGenerator::generate_pawn_moves(int from, bool is_white, std::vector<Mov
 }
 
 void MoveGenerator::generate_knight_moves(int from, std::vector<Move>& moves) {
+    // All possible knight offsets
     std::vector<int> offsets = {6, 10, 15, 17};
 
     for (int o : offsets) {
@@ -66,6 +73,7 @@ void MoveGenerator::generate_cardinals(int from, std::vector<Move>& moves, int p
     int file = from % Board::SIDE;
     int rank = from / Board::SIDE;
     
+    // Horizontal
     for (int r = 0; r < Board::SIDE; r++) {
         if (r != rank) {
             Move m(from, r * Board::SIDE + file, piece);
@@ -73,6 +81,7 @@ void MoveGenerator::generate_cardinals(int from, std::vector<Move>& moves, int p
         }
     }
     
+    // Vertical
     for (int f = 0; f < Board::SIDE; f++) {
         if (f != file) {
             Move m(from, rank * Board::SIDE + f, piece);
@@ -124,6 +133,7 @@ void MoveGenerator::generate_queen_moves(int from, std::vector<Move>& moves) {
 }
 
 void MoveGenerator::generate_king_moves(int from, bool is_white, std::vector<Move>& moves) {
+    // Possible king offsets
     std::vector<int> offsets = {1, 7, 8, 9};
 
     for (int o : offsets) {
@@ -134,6 +144,7 @@ void MoveGenerator::generate_king_moves(int from, bool is_white, std::vector<Mov
         moves.push_back(neg);
     }
 
+    // Castling move generation
     if (is_white && from == 4) {
         moves.push_back(Move(4, 6, Board::KING));
         moves.push_back(Move(4, 2, Board::KING));
@@ -146,14 +157,17 @@ void MoveGenerator::generate_king_moves(int from, bool is_white, std::vector<Mov
 std::vector<Move> MoveGenerator::generate_moves(Board& board, bool is_white) {
     std::vector<Move> result;
 
+    // For every type of piece
     for (int i = 0; i < Board::PIECES; i++) {
         int index = board.bb_index(i, is_white);
         uint64_t bitboard = board.get_bitboard(index);
         uint64_t temp = bitboard;
 
+        // For every piece of a type
         while (temp != 0) {
             int from = Board::pop_bit(&temp);
 
+            // Generate moves from the square they are on
             switch (i) {
                 case Board::PAWN:
                     generate_pawn_moves(from, is_white, result);
