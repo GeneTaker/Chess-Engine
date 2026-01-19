@@ -85,10 +85,24 @@ CMakeFiles/chess_engine.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/chess_engine.dir/src/main.cpp.s"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\jeffc\Chess-Engine\src\main.cpp -o CMakeFiles\chess_engine.dir\src\main.cpp.s
 
+CMakeFiles/chess_engine.dir/src/game_controller.cpp.obj: CMakeFiles/chess_engine.dir/flags.make
+CMakeFiles/chess_engine.dir/src/game_controller.cpp.obj: C:/Users/jeffc/Chess-Engine/src/game_controller.cpp
+CMakeFiles/chess_engine.dir/src/game_controller.cpp.obj: CMakeFiles/chess_engine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\jeffc\Chess-Engine\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/chess_engine.dir/src/game_controller.cpp.obj"
+	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/chess_engine.dir/src/game_controller.cpp.obj -MF CMakeFiles\chess_engine.dir\src\game_controller.cpp.obj.d -o CMakeFiles\chess_engine.dir\src\game_controller.cpp.obj -c C:\Users\jeffc\Chess-Engine\src\game_controller.cpp
+
+CMakeFiles/chess_engine.dir/src/game_controller.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/chess_engine.dir/src/game_controller.cpp.i"
+	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\jeffc\Chess-Engine\src\game_controller.cpp > CMakeFiles\chess_engine.dir\src\game_controller.cpp.i
+
+CMakeFiles/chess_engine.dir/src/game_controller.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/chess_engine.dir/src/game_controller.cpp.s"
+	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\jeffc\Chess-Engine\src\game_controller.cpp -o CMakeFiles\chess_engine.dir\src\game_controller.cpp.s
+
 CMakeFiles/chess_engine.dir/src/evaluator.cpp.obj: CMakeFiles/chess_engine.dir/flags.make
 CMakeFiles/chess_engine.dir/src/evaluator.cpp.obj: C:/Users/jeffc/Chess-Engine/src/evaluator.cpp
 CMakeFiles/chess_engine.dir/src/evaluator.cpp.obj: CMakeFiles/chess_engine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\jeffc\Chess-Engine\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/chess_engine.dir/src/evaluator.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\jeffc\Chess-Engine\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/chess_engine.dir/src/evaluator.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/chess_engine.dir/src/evaluator.cpp.obj -MF CMakeFiles\chess_engine.dir\src\evaluator.cpp.obj.d -o CMakeFiles\chess_engine.dir\src\evaluator.cpp.obj -c C:\Users\jeffc\Chess-Engine\src\evaluator.cpp
 
 CMakeFiles/chess_engine.dir/src/evaluator.cpp.i: cmake_force
@@ -102,7 +116,7 @@ CMakeFiles/chess_engine.dir/src/evaluator.cpp.s: cmake_force
 CMakeFiles/chess_engine.dir/src/board.cpp.obj: CMakeFiles/chess_engine.dir/flags.make
 CMakeFiles/chess_engine.dir/src/board.cpp.obj: C:/Users/jeffc/Chess-Engine/src/board.cpp
 CMakeFiles/chess_engine.dir/src/board.cpp.obj: CMakeFiles/chess_engine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\jeffc\Chess-Engine\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/chess_engine.dir/src/board.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\jeffc\Chess-Engine\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/chess_engine.dir/src/board.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/chess_engine.dir/src/board.cpp.obj -MF CMakeFiles\chess_engine.dir\src\board.cpp.obj.d -o CMakeFiles\chess_engine.dir\src\board.cpp.obj -c C:\Users\jeffc\Chess-Engine\src\board.cpp
 
 CMakeFiles/chess_engine.dir/src/board.cpp.i: cmake_force
@@ -116,7 +130,7 @@ CMakeFiles/chess_engine.dir/src/board.cpp.s: cmake_force
 CMakeFiles/chess_engine.dir/src/move_generator.cpp.obj: CMakeFiles/chess_engine.dir/flags.make
 CMakeFiles/chess_engine.dir/src/move_generator.cpp.obj: C:/Users/jeffc/Chess-Engine/src/move_generator.cpp
 CMakeFiles/chess_engine.dir/src/move_generator.cpp.obj: CMakeFiles/chess_engine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\jeffc\Chess-Engine\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/chess_engine.dir/src/move_generator.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\jeffc\Chess-Engine\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/chess_engine.dir/src/move_generator.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/chess_engine.dir/src/move_generator.cpp.obj -MF CMakeFiles\chess_engine.dir\src\move_generator.cpp.obj.d -o CMakeFiles\chess_engine.dir\src\move_generator.cpp.obj -c C:\Users\jeffc\Chess-Engine\src\move_generator.cpp
 
 CMakeFiles/chess_engine.dir/src/move_generator.cpp.i: cmake_force
@@ -130,7 +144,7 @@ CMakeFiles/chess_engine.dir/src/move_generator.cpp.s: cmake_force
 CMakeFiles/chess_engine.dir/src/engine.cpp.obj: CMakeFiles/chess_engine.dir/flags.make
 CMakeFiles/chess_engine.dir/src/engine.cpp.obj: C:/Users/jeffc/Chess-Engine/src/engine.cpp
 CMakeFiles/chess_engine.dir/src/engine.cpp.obj: CMakeFiles/chess_engine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\jeffc\Chess-Engine\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/chess_engine.dir/src/engine.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\jeffc\Chess-Engine\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/chess_engine.dir/src/engine.cpp.obj"
 	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/chess_engine.dir/src/engine.cpp.obj -MF CMakeFiles\chess_engine.dir\src\engine.cpp.obj.d -o CMakeFiles\chess_engine.dir\src\engine.cpp.obj -c C:\Users\jeffc\Chess-Engine\src\engine.cpp
 
 CMakeFiles/chess_engine.dir/src/engine.cpp.i: cmake_force
@@ -144,6 +158,7 @@ CMakeFiles/chess_engine.dir/src/engine.cpp.s: cmake_force
 # Object files for target chess_engine
 chess_engine_OBJECTS = \
 "CMakeFiles/chess_engine.dir/src/main.cpp.obj" \
+"CMakeFiles/chess_engine.dir/src/game_controller.cpp.obj" \
 "CMakeFiles/chess_engine.dir/src/evaluator.cpp.obj" \
 "CMakeFiles/chess_engine.dir/src/board.cpp.obj" \
 "CMakeFiles/chess_engine.dir/src/move_generator.cpp.obj" \
@@ -153,6 +168,7 @@ chess_engine_OBJECTS = \
 chess_engine_EXTERNAL_OBJECTS =
 
 chess_engine.exe: CMakeFiles/chess_engine.dir/src/main.cpp.obj
+chess_engine.exe: CMakeFiles/chess_engine.dir/src/game_controller.cpp.obj
 chess_engine.exe: CMakeFiles/chess_engine.dir/src/evaluator.cpp.obj
 chess_engine.exe: CMakeFiles/chess_engine.dir/src/board.cpp.obj
 chess_engine.exe: CMakeFiles/chess_engine.dir/src/move_generator.cpp.obj
@@ -161,7 +177,7 @@ chess_engine.exe: CMakeFiles/chess_engine.dir/build.make
 chess_engine.exe: CMakeFiles/chess_engine.dir/linkLibs.rsp
 chess_engine.exe: CMakeFiles/chess_engine.dir/objects1.rsp
 chess_engine.exe: CMakeFiles/chess_engine.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\jeffc\Chess-Engine\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable chess_engine.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\jeffc\Chess-Engine\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable chess_engine.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\chess_engine.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

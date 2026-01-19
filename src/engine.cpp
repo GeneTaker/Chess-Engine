@@ -12,6 +12,8 @@ int Engine::search(Board& board, int depth, bool is_white, int alpha, int beta) 
 
     if (board.is_checkmate(is_white)) {
         return -999999;
+    } else if (board.is_draw(is_white)) {
+        return 0;
     }
 
     if (all_moves.size() == 0) {
@@ -42,7 +44,7 @@ int Engine::quiescence(Board& board, bool is_white, int alpha, int beta, int q_d
     if (initial >= beta) return beta;
     if (alpha < initial) alpha = initial;
 
-    if (q_depth >= 10) return initial;
+    if (q_depth >= MAX_QUIESCENCE) return initial;
 
     vector<Move> attacks = board.find_legal_attacks(is_white);
 

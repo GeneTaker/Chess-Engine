@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
-#include "board.h"
-#include "game_controller.h"
+#include "../include/board.h"
+#include "../include/game_controller.h"
 
 int GameController::parse_to_square(string input) {
     if (input.size() != 2) return -1;

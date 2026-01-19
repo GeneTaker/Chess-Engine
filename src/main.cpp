@@ -1,5 +1,5 @@
 #include <iostream>
-#include "game_controller.h"
+#include "../include/game_controller.h"
 
 
 int main() {

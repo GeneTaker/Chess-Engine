@@ -586,8 +586,8 @@ bool Board::legal_pawn_move(Move move, bool is_white) {
     }
     
     // Capture
-    uint64_t capture_left = (is_white) ? (from_mask & ~Board::FILE_A) << (Board::SIDE - 1) : (from_mask & ~Board::FILE_H) >> (Board::SIDE + 1);
-    uint64_t capture_right = (is_white) ? (from_mask & ~Board::FILE_H) << (Board::SIDE + 1) : (from_mask & ~Board::FILE_A) >> (Board::SIDE - 1);
+    uint64_t capture_left = (is_white) ? (from_mask & ~Board::FILE_A) << (Board::SIDE - 1) : (from_mask & ~Board::FILE_A) >> (Board::SIDE + 1);
+    uint64_t capture_right = (is_white) ? (from_mask & ~Board::FILE_H) << (Board::SIDE + 1) : (from_mask & ~Board::FILE_H) >> (Board::SIDE - 1);
 
     if ((capture_left | capture_right) & to_mask & other) {
         return true;
@@ -679,7 +679,7 @@ bool Board::legal_king_move(Move move, bool is_white) {
                 return ((short_mask & occupied) == 0);
             }
             if (Board::CASTLE_WL & castle_rights && move.to == 2) {
-                uint64_t long_mask = (1ULL << 2) | (1ULL << 3);
+                uint64_t long_mask = (1ULL << 1) | (1ULL << 2) | (1ULL << 3);
                 if (is_attacked(3, is_white) || is_attacked(2, is_white)) return false;
                 return (long_mask & occupied) == 0;
             }
@@ -690,7 +690,7 @@ bool Board::legal_king_move(Move move, bool is_white) {
                 return (short_mask & occupied) == 0;
             }
             if (Board::CASTLE_BL & castle_rights && move.to == 58) {
-                uint64_t long_mask = (1ULL << 58) | (1ULL << 59);
+                uint64_t long_mask = (1ULL << 57) | (1ULL << 58) | (1ULL << 59);
                 if (is_attacked(59, is_white) || is_attacked(58, is_white)) return false;
                 return (long_mask & occupied) == 0;
             }
@@ -1002,7 +1002,11 @@ bool Board::insufficient_material() {
 }
 
 bool Board::is_over(bool is_white) {
-    return insufficient_material() || is_three_fold() || is_stalemate(is_white) || is_checkmate(is_white);
+    return is_draw(is_white) || is_checkmate(is_white);
+}
+
+bool Board::is_draw(bool is_white) {
+    return insufficient_material() || is_three_fold() || is_stalemate(is_white);
 }
 
 uint64_t Board::king_adjacent(bool is_white) {

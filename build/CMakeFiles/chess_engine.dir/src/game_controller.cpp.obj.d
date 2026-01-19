@@ -1,5 +1,5 @@
-CMakeFiles/chess_engine.dir/src/main.cpp.obj: \
- C:\Users\jeffc\Chess-Engine\src\main.cpp \
+CMakeFiles/chess_engine.dir/src/game_controller.cpp.obj: \
+ C:\Users\jeffc\Chess-Engine\src\game_controller.cpp \
  C:/msys64/mingw64/include/c++/15.2.0/iostream \
  C:/msys64/mingw64/include/c++/15.2.0/bits/requires_hosted.h \
  C:/msys64/mingw64/include/c++/15.2.0/x86_64-w64-mingw32/bits/c++config.h \
@@ -148,7 +148,6 @@ CMakeFiles/chess_engine.dir/src/main.cpp.obj: \
  C:/msys64/mingw64/include/c++/15.2.0/bits/ostream.tcc \
  C:/msys64/mingw64/include/c++/15.2.0/istream \
  C:/msys64/mingw64/include/c++/15.2.0/bits/istream.tcc \
- C:/Users/jeffc/Chess-Engine/include/game_controller.h \
  C:/Users/jeffc/Chess-Engine/include/board.h \
  C:/msys64/mingw64/include/c++/15.2.0/cstdint \
  C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdint.h \
@@ -161,6 +160,8 @@ CMakeFiles/chess_engine.dir/src/main.cpp.obj: \
  C:/msys64/mingw64/include/c++/15.2.0/bits/vector.tcc \
  C:/Users/jeffc/Chess-Engine/include/past_move.h \
  C:/Users/jeffc/Chess-Engine/include/move_generator.h \
+ C:/Users/jeffc/Chess-Engine/include/board.h \
+ C:/Users/jeffc/Chess-Engine/include/game_controller.h \
  C:/Users/jeffc/Chess-Engine/include/board.h \
  C:/Users/jeffc/Chess-Engine/include/engine.h \
  C:/Users/jeffc/Chess-Engine/include/evaluator.h

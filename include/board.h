@@ -214,6 +214,8 @@ public:
     
     bool is_over(bool is_white);
     
+    bool is_draw(bool is_white);
+
     bool insufficient_material();
     
     uint64_t get_rook_attacks(int square);

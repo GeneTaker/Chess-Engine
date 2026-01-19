@@ -232,6 +232,30 @@ src/evaluator.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_tests.dir\build.make CMakeFiles/chess_tests.dir/src/evaluator.cpp.s
 .PHONY : src/evaluator.cpp.s
 
+src/game_controller.obj: src/game_controller.cpp.obj
+.PHONY : src/game_controller.obj
+
+# target to build an object file
+src/game_controller.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_engine.dir\build.make CMakeFiles/chess_engine.dir/src/game_controller.cpp.obj
+.PHONY : src/game_controller.cpp.obj
+
+src/game_controller.i: src/game_controller.cpp.i
+.PHONY : src/game_controller.i
+
+# target to preprocess a source file
+src/game_controller.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_engine.dir\build.make CMakeFiles/chess_engine.dir/src/game_controller.cpp.i
+.PHONY : src/game_controller.cpp.i
+
+src/game_controller.s: src/game_controller.cpp.s
+.PHONY : src/game_controller.s
+
+# target to generate assembly for a file
+src/game_controller.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess_engine.dir\build.make CMakeFiles/chess_engine.dir/src/game_controller.cpp.s
+.PHONY : src/game_controller.cpp.s
+
 src/main.obj: src/main.cpp.obj
 .PHONY : src/main.obj
 
@@ -567,6 +591,9 @@ help:
 	@echo ... src/evaluator.obj
 	@echo ... src/evaluator.i
 	@echo ... src/evaluator.s
+	@echo ... src/game_controller.obj
+	@echo ... src/game_controller.i
+	@echo ... src/game_controller.s
 	@echo ... src/main.obj
 	@echo ... src/main.i
 	@echo ... src/main.s
